@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kendama Open</title>
+</head>
+
+<body>
+    <div class="addPlayer">
+        <form class="addPlayerForm" action="/addPlayer" method="post">
+            <input type="text" name="pName" placeholder="name">
+            <input type="text" name="pSurname" placeholder="surname">
+            <button class="addPlayerButton" type="submit">Add</button>
+        </form>
+    </div>
+    
+     <div class="removePlayer">
+        <form class="removePlayerForm" action="/removePlayer" method="post">
+            <input type="text" name="pIndex" placeholder="player number">
+            <button class="removePlayerButton" type="submit">Remove</button>
+        </form>
+    </div>
+    
+  <div class="playerTable">
+      {% for p in dfDict: %}
+      <p>{{ dfDict.index(p) }}. {{ p.name}} {{ p.surname }} {{ p.points }}</p>
+      {% endfor %}
+    </div>
+    
+    
+    <div class="ken"> 
+        {% for p in dfDict %}
+            {% if p.points < p.maxPoints: %}
+        <p>{{ p.name}} {{ p.surname }}: {{ p.points }}</p>
+            <form class="addPoint" action="/addPoint/{{ dfDict.index(p) }}" method="post">
+                <input type="submit" value="add point" />
+            </form>
+            {% endif %}
+            
+        {% endfor %}
+    </div>
+</body>
+
+</html>

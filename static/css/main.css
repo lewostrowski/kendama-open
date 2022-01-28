@@ -1,0 +1,11 @@
+body {
+  background: Linen;
+  margin-top: 50px;
+  margin-left: 100px;
+  }
+div.playerTable {
+    width: 500px;
+    height: 500px;
+    overflow-x: hidden;
+      overflow-y: auto;
+}
