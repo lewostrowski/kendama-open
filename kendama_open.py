@@ -3,7 +3,7 @@ import random
 
 class Table:
     def create():
-        df = pd.DataFrame(columns=[['name', 'surname', 'points', 'maxPoints']])
+        df = pd.DataFrame(columns=[['name', 'surname', 'points', 'word', 'gameUID', 'winGames', 'finGames', 'end']])
         return df 
     
     def show(tableLink=0):
@@ -15,12 +15,14 @@ class Table:
         
     def addPlayer(tableName, playerDataArray):
         userInput = {}
-        for c in tableName.columns:
-            if tableName.columns.get_loc(c) < 2:
-                userInput.update({c:playerDataArray[tableName.columns.get_loc(c)]})
-            elif tableName.columns.get_loc(c) == 2: userInput.update({c:0})
-            elif tableName.columns.get_loc(c) == 3: userInput.update({c:3})
-                
+        userInput.update({'name':playerDataArray[0]})
+        userInput.update({'surname':playerDataArray[1]})
+        userInput.update({'points':0})
+        userInput.update({'word':'KEN'})
+        userInput.update({'gameUID':0})
+        userInput.update({'winGames':0})
+        userInput.update({'finGames':0})
+        userInput.update({'end':False})
         df = pd.DataFrame(userInput, index=[0])
         return df
         
@@ -59,3 +61,34 @@ class Game:
         df = Table.show(tableLink)
         df.loc[df.index == pIndex, 'points'] += 1
         return df
+    
+    def removePoint(tableLink, pIndex):
+        df = Table.show(tableLink)
+        df.loc[df.index == pIndex, 'points'] -= 1
+        return df
+    
+    def checkForWinner(playerDict):
+        playerLeft = []
+        for p in playerDict:
+            if p.get('points') == len(p.get('word')):
+                playerLeft.append(playerDict.index(p))
+        if len(playerLeft) < len(playerDict)-1 and len(playerDict) > 1: finish = False
+        elif len(playerLeft) == len(playerDict)-1  and len(playerDict) > 1: 
+            finish = True
+        else: finish = False
+        return finish
+    
+    def resetGame(playerDict, gameUID):
+        if type(gameUID) == int: pass
+        for p in playerDict:
+            p.update({'points':0})
+            newVal = p.get('finGames')
+            newVal += 1
+            p.update({'finGames':newVal})
+            print(p.get('end'))
+            if p.get('end') == False: 
+                newVal = p.get('winGames')
+                newVal += 1
+                p.update({'winGames':newVal})
+            else: p.update({'end':False})
+        return playerDict

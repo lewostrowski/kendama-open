@@ -1,11 +1,30 @@
 body {
   background: Linen;
-  margin-top: 50px;
-  margin-left: 100px;
+  margin: 100px;
   }
-div.playerTable {
-    width: 500px;
-    height: 500px;
-    overflow-x: hidden;
-      overflow-y: auto;
+
+div.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-auto-rows: minmax(200, auto);
+  grid-gap: 3em;
+}
+
+div.left {
+    grid-column: 1/2;
+}
+
+.playerTableList {
+    display: flex;
+    align-items: center;
+}
+
+div.right {
+    grid-column: 2/3;
+}
+
+.kendamaGamePlayerList {
+    display: flex;
+    align-items: center;
 }
