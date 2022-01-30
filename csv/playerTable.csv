@@ -1,3 +1,1 @@
-name,surname,points,word,gameUID,winGames,finGames,end
-Damian,Burza,2,KEN,0,0,4,False
-Damian,Błoto,1,KEN,0,1,4,False
+name,surname,points,word,gameUID,winGames,finGames,end,masterUID

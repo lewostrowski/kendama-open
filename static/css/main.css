@@ -15,6 +15,37 @@ div.left {
     grid-column: 1/2;
 }
 
+.addPlayer {
+    border: 1px solid;
+    margin: 10px;
+    padding: 10px;
+}
+
+.playerTable {
+    border: 1px solid;
+    margin: 10px;
+    padding: 10px;
+}
+
+
+.finalTalbe {
+    border: 1px solid;
+    margin: 10px;
+    padding: 10px;
+}
+
+.gameConfig {
+    border: 1px solid;
+    margin: 10px;
+    padding: 10px;
+}
+
+.kenGame {
+    border: 1px solid;
+    margin: 10px;
+    padding: 10px;
+}
+
 .playerTableList {
     display: flex;
     align-items: center;
@@ -28,3 +59,4 @@ div.right {
     display: flex;
     align-items: center;
 }
+
