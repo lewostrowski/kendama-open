@@ -3,7 +3,7 @@ import random
 
 class Table:
     def create():
-        df = pd.DataFrame(columns=[['name', 'surname', 'points', 'word', 'gameUID', 'winGames', 'finGames', 'end']])
+        df = pd.DataFrame(columns=[['name', 'surname', 'points', 'word', 'gameUID', 'winGames', 'finGames', 'end', 'masterUID']])
         return df 
     
     def show(tableLink=0):
@@ -23,8 +23,8 @@ class Table:
         userInput.update({'winGames':0})
         userInput.update({'finGames':0})
         userInput.update({'end':False})
-        df = pd.DataFrame(userInput, index=[0])
-        return df
+        userInput.update({'masterUID':0})
+        return userInput
         
     def removePlayer(tableName, pIndex):
         tableName = tableName.drop(index=int(pIndex))
@@ -78,17 +78,39 @@ class Game:
         else: finish = False
         return finish
     
-    def resetGame(playerDict, gameUID):
-        if type(gameUID) == int: pass
+    def resetGame(playerDict, masterUID=0):
+        hardReset = False  
+        
         for p in playerDict:
-            p.update({'points':0})
-            newVal = p.get('finGames')
-            newVal += 1
-            p.update({'finGames':newVal})
-            print(p.get('end'))
-            if p.get('end') == False: 
-                newVal = p.get('winGames')
+            if p.get('masterUID') == '0' or masterUID == 0: 
+                hardReset = True
+            
+        if hardReset == False:
+            for p in playerDict:
+                p.update({'points':0})
+
+                newVal = p.get('finGames')
                 newVal += 1
-                p.update({'winGames':newVal})
-            else: p.update({'end':False})
+                p.update({'finGames':newVal})
+
+                newVal = p.get('gameUID')
+                newVal += 1
+                p.update({'gameUID':newVal})
+
+                if p.get('end') == False: 
+                    newVal = p.get('winGames')
+                    newVal += 1
+                    p.update({'winGames':newVal})
+                else: p.update({'end':False})
+                
+        elif hardReset == True:
+            for p in playerDict:
+                p.update({'points':0})
+                p.update({'word':'KEN'})
+                p.update({'gameUID':0})
+                p.update({'winGames':0})
+                p.update({'finGames':0})
+                p.update({'end':False})
+                p.update({'masterUID':0})
+        print(playerDict)
         return playerDict

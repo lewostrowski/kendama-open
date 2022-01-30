@@ -48,13 +48,27 @@
     <div class="right">
         <div class="gameConfig">
             <h2>Game config</h2>
-            <form class="gameConfigWord" action="/changeConfigWord" method="post">
-                <input type="text" name="newWord" placeholder="word">
-                <button class="gameConfigWordButton" type="submit">Set</button>
-                {% if dfDict|length > 0 %}
-                    <p>current: {{ dfDict[0].get('word') }}</p>
-                {% endif %}
-            </form>
+            
+            <div class="gameConfigWord">
+                <form class="gameConfigWordForm" action="/changeConfigWord" method="post">
+                    <input type="text" name="newWord" placeholder="word">
+                    <button class="gameConfigWordButton" type="submit">Set</button>
+                    {% if dfDict|length > 0 %}
+                        <p>current: {{ dfDict[0].get('word') }}</p>
+                    {% endif %}
+                </form>
+             </div>
+            
+            <div class="gameConfigMasterUID">
+                    {% if dfDict|length > 0 %}
+                        <p>current masterUID: {{ dfDict[0].get('word') }}</p>
+                {% else: %} <p>No masterUID</p>
+                    {% endif %}
+                <form class="gameConfigMasterUIDButton" action="/changeConfigMasterUID" method="post">
+                    <input type="submit" value="Create masterUID">
+                </form>
+            </div>
+            
         </div>
             
         <div class="kenGame"> 
@@ -103,7 +117,7 @@
                       {% endif %}
                   {% endfor %}
                   <div class="nextGame">
-                    <form class="nextGameButton" action="/nextGame/{{ dfDict[0].get('gameUID') }}" method="post">
+                    <form class="nextGameButton" action="/nextGame/{{ dfDict[0].get('masterUID') }}" method="post">
                     <input type="submit" value="Next game">
                 </form>
             {% endif %}
