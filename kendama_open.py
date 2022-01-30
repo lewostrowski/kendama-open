@@ -1,5 +1,6 @@
 import pandas as pd
 import random
+from datetime import datetime
 
 class Table:
     def create():
@@ -29,6 +30,18 @@ class Table:
     def removePlayer(tableName, pIndex):
         tableName = tableName.drop(index=int(pIndex))
         return tableName
+    
+    def saveToMaster(playerDict):
+        saveResults = True
+        for p in playerDict:
+            if p.get('masterUID') == 0: saveResults = False
+    
+        if saveResults == True: 
+            timeStamp = datetime.now()
+            for p in playerDict: p.update({'timeStamp':timeStamp})
+            dfN = pd.DataFrame(playerDict)
+        else: dfN = False
+        return dfN
     
     
 class Group:
@@ -78,7 +91,7 @@ class Game:
         else: finish = False
         return finish
     
-    def resetGame(playerDict, masterUID=0):
+    def resetGame(playerDict, masterUID=0, exclude=0):
         hardReset = False  
         
         for p in playerDict:
@@ -106,7 +119,6 @@ class Game:
         elif hardReset == True:
             for p in playerDict:
                 p.update({'points':0})
-                p.update({'word':'KEN'})
                 p.update({'gameUID':0})
                 p.update({'winGames':0})
                 p.update({'finGames':0})
