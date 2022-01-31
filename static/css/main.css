@@ -60,3 +60,7 @@ div.right {
     align-items: center;
 }
 
+.gameStats {
+    height: 300px;
+    overflow: scroll;
+}

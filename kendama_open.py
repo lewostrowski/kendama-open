@@ -4,7 +4,7 @@ from datetime import datetime
 
 class Table:
     def create():
-        df = pd.DataFrame(columns=[['name', 'surname', 'points', 'word', 'gameUID', 'winGames', 'finGames', 'end', 'masterUID']])
+        df = pd.DataFrame(columns=[['name', 'points', 'word', 'gameUID', 'winGames', 'finGames', 'end', 'masterUID']])
         return df 
     
     def show(tableLink=0):
@@ -14,10 +14,9 @@ class Table:
             df = pd.read_csv(tableLink)
             return df
         
-    def addPlayer(tableName, playerDataArray):
+    def addPlayer(tableName, playerData):
         userInput = {}
-        userInput.update({'name':playerDataArray[0]})
-        userInput.update({'surname':playerDataArray[1]})
+        userInput.update({'name':playerData})
         userInput.update({'points':0})
         userInput.update({'word':'KEN'})
         userInput.update({'gameUID':0})
