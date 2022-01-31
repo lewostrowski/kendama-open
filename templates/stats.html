@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kendama Open</title>
+</head>
+
+<body>
+    <div class="gameStats">
+            {% for table in tables %}
+            <h2>{{titles[loop.index]}}</h2>                            
+            {{ table|safe }}
+            {% endfor %}   
+    </div>
+</body>
+</html>

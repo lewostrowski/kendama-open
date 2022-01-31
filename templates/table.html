@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kendama Open</title>
+</head>
+
+<body>
+<div class="container">
+    <div class="left">
+        <div class="addPlayer">
+            <h2>Add player</h2>
+            <form class="addPlayerForm" action="/showPlayerTable/addPlayer" method="post">
+                <input type="text" name="pName" placeholder="name">
+                <button class="addPlayerButton" type="submit">Add</button>
+            </form>
+        </div>
+
+          <div class="playerTable">
+              <h2>Player table</h2>
+              {% for p in dfDict: %}
+                  <div class="playerTableList">
+                      <div class="playerTablePlayerName">
+                          <p>{{ dfDict.index(p) + 1 }}. {{ p.name}} {{ p.surname }}</p>
+                      </div>
+                      <div class="playerTableRemoveButton">
+                        <form class="removePlayerForm" action="/showPlayerTable/removePlayer/{{ dfDict.index(p) }}" method="post">
+                            <input type="submit" value="ramove plyer">
+                        </form>
+                      </div>
+                  </div>
+              {% endfor %}
+            </div>
+
+        <div class="finalTalbe">
+            <h2>Final table</h2>
+            {% for table in tables %}
+            <h2>{{titles[loop.index]}}</h2>                            
+            {{ table|safe }}
+            {% endfor %}   
+        </div>
+    </div>
+    
+    <div class="right">
+        <div class="gameConfig">
+            <h2>Game config</h2>
+            
+            <div class="gameConfigWord">
+                <form class="gameConfigWordForm" action="/showPlayerTable/changeConfigWord" method="post">
+                    <input type="text" name="newWord" placeholder="word">
+                    <button class="gameConfigWordButton" type="submit">Set</button>
+                    {% if dfDict|length > 0 %}
+                        <p>current: {{ dfDict[0].get('word') }}</p>
+                    {% endif %}
+                </form>
+             </div>
+            
+            <div class="gameConfigMasterUID">
+                    {% if dfDict|length > 0 %}
+                        <p>current masterUID: {{ dfDict[0].get('masterUID') }}</p>
+                {% else: %} <p>No masterUID</p>
+                    {% endif %}
+                <form class="gameConfigMasterUIDButton" action="/showPlayerTable/changeConfigMasterUID" method="post">
+                    <input type="submit" value="Create masterUID">
+                </form>
+            </div>
+            
+        </div>
+            <form class="nextGameButton" action="/showGame" method="post">
+                <input type="submit" value="Start game">
+            </form>
+            <form class="gameFinish" action="/showPlayerTable/gameFinish" method="post">
+                <input type="submit" value="Finish">
+            </form>
+    </div>
+</div>
+    
+                
+</body>
+
+</html>

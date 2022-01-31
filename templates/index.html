@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kendama Open</title>
+</head>
+
+<body>
+    <div class="menu"> 
+        <form class="menuButton" action="/startKenGame" method="post">
+            <input type="submit" value="Ken Game">
+        </form>
+        <form class="menuButton" action="/showStats" method="post">
+            <input type="submit" value="show stats">
+        </form>
+    </div>
+</body>
+</html>
