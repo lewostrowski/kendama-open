@@ -37,6 +37,7 @@ class Table:
     
         if saveResults == True: 
             timeStamp = datetime.now()
+            timeStamp = timeStamp.strftime('%Y-%m-%d %H:%M')
             for p in playerDict: p.update({'timeStamp':timeStamp})
             dfN = pd.DataFrame(playerDict)
         else: dfN = False
@@ -123,5 +124,29 @@ class Game:
                 p.update({'finGames':0})
                 p.update({'end':False})
                 p.update({'masterUID':0})
-        print(playerDict)
         return playerDict
+
+class Stats:
+    #filtr czasowy
+    def filterByDate(tableLink, startDate=0, startTime='00:00', endDate=0, endTime='23:59'):
+        if startDate == 0: startDate = df['timestamp'].values[0]
+        if endDate == 0: endDate = df['timestamp'].values[-1]
+        df = Table.show(tableLink)
+        df['timestamp'] = pd.to_datetime(df['timestamp'], yearfirst=True)
+        df = df.loc[(df['timestamp'] >= f'{startDate} {startTime}') & (df['timestamp'] <= f'{endDate} {endTime}')]
+        return df
+
+    # osoba, która wygrała najwięcej gier
+    def overallWinner(tableLink):
+        df = Table.show(tableLink)
+        df = df.loc[df['end'] == False]
+        dfN = df[['name', 'end']].groupby('name').count().sort_values('end', ascending=False)
+        dfDict = dfN.to_dict()
+        return dfDict
+
+    #osoba, która wygrała najwięcej w danym czasie
+    def timeWinner(tableLink, startDate=0, startTime='00:00', endDate=0, endTime='23:59'):
+        df = Table.show(tableLink)
+        dfFilter = filterByDate(df, startDate, startTime, endDate, endTime)
+        dfDict = overallWinner(dfFilter)
+        return dfDict

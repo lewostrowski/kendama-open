@@ -14,3 +14,8 @@ def showStats():
     dfDict = df.to_dict('records')
     dfFin = df[['name', 'points', 'word', 'gameUID', 'winGames', 'finGames', 'end', 'masterUID', 'timestamp']]
     return render_template('stats.html', dfDict=dfDict, tables=[dfFin.to_html()], titles=[''])
+
+@statsBlueprint.route('/showStats/overallWinner', methods=['POST', 'GET'])
+def overallWinner():
+    df = ko.Stats.overallWinner(masterLink)
+    return render_template('stats.html', dfDict=df['end'])
