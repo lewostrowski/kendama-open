@@ -8,14 +8,47 @@ statsBlueprint = Blueprint('stats_blueprint', __name__)
 playerTableLink = 'csv/playerTable.csv'
 masterLink = 'csv/masterTable.csv'
 
+## ŻEBY TO SIĘ SENSOWNIE FILTROWAŁO MUSI POWSTAWAĆ OSOBNE CSV Z WIDOKIEM
+
 @statsBlueprint.route('/showStats')
 def showStats():
     df = ko.Table.show(masterLink)
     dfDict = df.to_dict('records')
     dfFin = df[['name', 'points', 'word', 'gameUID', 'winGames', 'finGames', 'end', 'masterUID', 'timestamp']]
-    return render_template('stats.html', dfDict=dfDict, tables=[dfFin.to_html()], titles=[''])
+    uniqueNames = []
+    for p in dfDict:
+        if p.get('name') not in uniqueNames:
+            uniqueNames.append(p.get('name'))
+    return render_template('stats.html', dfDict=dfDict, uniqueNames=uniqueNames, tables=[dfFin.to_html()], titles=[''])
 
 @statsBlueprint.route('/showStats/overallWinner', methods=['POST', 'GET'])
 def overallWinner():
     df = ko.Stats.overallWinner(masterLink)
     return render_template('stats.html', dfDict=df['end'])
+
+@statsBlueprint.route('/showStats/masterFilter', methods=['POST', 'GET'])
+def timeFilter():
+    startDate = request.form.get('startDate')
+    endDate = request.form.get('endDate')
+    if len(startDate) != '0' or len(endDate) != '0':
+        if len(startDate) == 0: startDate = 0
+        if len(endDate) == 0: endDate = 0
+        df = ko.Stats.filterByDate(masterLink, startDate=startDate, endDate=endDate)
+    else:
+        df = ko.Table.show(masterLink)
+
+    name = request.form.get('playerName')
+    if name != 'all': dfDict = ko.Stats.filterByName(df, name)
+    else: dfDict = df.to_dict('records')
+
+    df = ko.Table.show(masterLink)
+    dfDrop = df.to_dict('records')
+    uniqueNames = []
+    for p in dfDrop:
+        if p.get('name') not in uniqueNames:
+            uniqueNames.append(p.get('name'))
+    return render_template('stats.html', dfDict=dfDict, uniqueNames=uniqueNames)
+
+@statsBlueprint.route('/showStats/gameFinish', methods=['POST', 'GET'])
+def gameFinish():
+    return redirect(url_for('showHome'))

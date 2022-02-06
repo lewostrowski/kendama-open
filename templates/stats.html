@@ -9,11 +9,42 @@
 </head>
 
 <body>
+      <form class="gameFinish" action="/showStats/gameFinish" method="post">
+          <input type="submit" value="Finish">
+      </form>
+        <form class="mainTable" action="/showStats" method="post">
+            <input type="submit" value="mainTable">
+        </form>
         <form class="overallWinner" action="/showStats/overallWinner" method="post">
             <input type="submit" value="overallWinner">
         </form>
 
-    {{ dfDict }}
-
+        <form class="timeFilter" action="/showStats/masterFilter" method="post">
+          <label for="startDate">Start Date</label>
+          <input type="date" name="startDate">
+          <label for="endDate">End Date</label>
+          <input type="date" name="endDate">
+          <label for="playerName">Player name: </label>
+          <select name="playerName">
+            <option value="all">All</option>
+            {% for p in uniqueNames %}
+            <option value="{{ p }}">{{ p }}</option>
+            {% endfor %}
+          </select>
+          <button class="sendButton" type="submit">Filter</button>
+        </form>
+    {% for p in dfDict %}
+    <div class="tableRow">
+      <div class="tableCell">
+        {{ p.name }}
+      </div>
+      <div class="tableCell">
+        {{ p.end }}
+      </div>
+      <div class="tableCell">
+        {{ p.masterUID }}
+      </div>
+    </div>
+    {% endfor %}
 </body>
 </html>

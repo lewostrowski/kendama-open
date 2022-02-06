@@ -13,7 +13,6 @@ app.register_blueprint(gameBlueprint)
 app.register_blueprint(tableBlueprint)
 app.register_blueprint(statsBlueprint)
 
-#tutaj musi iść backendowa obsługa tabel
 playerTableLink = 'csv/playerTable.csv'
 masterLink = 'csv/masterTable.csv'
 
@@ -32,5 +31,3 @@ def showStats():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-

@@ -9,76 +9,118 @@
 </head>
 
 <body>
-<div class="container">
-    <div class="left">
-        <div class="addPlayer">
-            <h2>Add player</h2>
-            <form class="addPlayerForm" action="/showPlayerTable/addPlayer" method="post">
-                <input type="text" name="pName" placeholder="name">
-                <button class="addPlayerButton" type="submit">Add</button>
-            </form>
+  <div class="tableContainer">
+    <div class="tableHeader">
+      <h1>Contest setup</h1>
+    </div>
+
+    <div class="tablePlayerForm">
+      <div class="playerFormHeader">
+        <h2>Add player</h2>
+      </div>
+      <div class="playerFormInput">
+        <form class="addPlayerForm" action="/showPlayerTable/addPlayer" method="post">
+          <div class="playerFormInputField">
+            <input type="text" name="pName" placeholder="Player's name">
+          </div>
+          <div class="playerFormInputButton">
+            <button class="addPlayerButton" type="submit">Add player</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="tableShow">
+      <div class="showHeader">
+        <h2>Player table</h2>
+      </div>
+      <div class="showPlayerList">
+        {% for p in dfDict: %}
+            <div class="showPlayerListRecord">
+              <p>{{ dfDict.index(p) + 1 }}. {{ p.name}} {{ p.surname }}</p>
+            </div>
+            <div class="showPlayerListButton">
+              <form class="playerListRemoveForm" action="/showPlayerTable/removePlayer/{{ dfDict.index(p) }}" method="post">
+                <div class="playerListRemoveButton">
+                  <input type="submit" value="Remove player">
+                </div>
+              </form>
+            </div>
+          {% endfor %}
+      </div>
+    </div>
+
+    <div class="tableFinal">
+      <div class="finalHeader">
+        <h2>Final table</h2>
+      </div>
+      <div class="finalDisplay">
+        {% for table in tables %}
+        <h2>{{titles[loop.index]}}</h2>
+        {{ table|safe }}
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="tableConfig">
+      <div class="configHeader">
+        <h2>Setup</h2>
+      </div>
+
+      <div class="configWord">
+        <div class="configWordForm">
+          <form class="configWordInput" action="/showPlayerTable/changeConfigWord" method="post">
+            <div class="configWordInputField">
+              <input type="text" name="newWord" placeholder="word">
+            </div>
+            <div class="configWordInputButton">
+              <button type="submit">Set</button>
+              {% if dfDict|length > 0 %}
+              <div class="configWordDisplay">
+                <p>current: {{ dfDict[0].get('word') }}</p>
+              </div>
+              {% endif %}
+            </div>
+          </form>
         </div>
 
-          <div class="playerTable">
-              <h2>Player table</h2>
-              {% for p in dfDict: %}
-                  <div class="playerTableList">
-                      <div class="playerTablePlayerName">
-                          <p>{{ dfDict.index(p) + 1 }}. {{ p.name}} {{ p.surname }}</p>
-                      </div>
-                      <div class="playerTableRemoveButton">
-                        <form class="removePlayerForm" action="/showPlayerTable/removePlayer/{{ dfDict.index(p) }}" method="post">
-                            <input type="submit" value="ramove plyer">
-                        </form>
-                      </div>
-                  </div>
-              {% endfor %}
-            </div>
+        <div class="configMaster">
+          <div class="configMasterDisplay">
+            {% if dfDict|length > 0 %}
+            <p>current masterUID: {{ dfDict[0].get('masterUID') }}</p>
+            {% else: %}
+            <p>No masterUID</p>
+            {% endif %}
+          </div>
+          <div class="configMasterForm">
+            <form class="cofigMasterInput" action="/showPlayerTable/changeConfigMasterUID" method="post">
+              <div class="configMasterInputButton">
+                <input type="submit" value="Create masterUID">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
 
-        <div class="finalTalbe">
-            <h2>Final table</h2>
-            {% for table in tables %}
-            <h2>{{titles[loop.index]}}</h2>                            
-            {{ table|safe }}
-            {% endfor %}   
+    <div class="tableGameNav">
+      <div class="gamNavNextForm">
+        <form action="/showGame" method="post">
+          <div class="gameNavNextButton">
+            <input type="submit" value="Start game">
+          </div>
+        </form>
+      </div>
+      <div class="gameNavFinForm">
+        <div class="gameNavFinButton">
+          <form action="/showPlayerTable/gameFinish" method="post">
+              <input type="submit" value="Finish">
+          </form>
         </div>
+      </div>
     </div>
-    
-    <div class="right">
-        <div class="gameConfig">
-            <h2>Game config</h2>
-            
-            <div class="gameConfigWord">
-                <form class="gameConfigWordForm" action="/showPlayerTable/changeConfigWord" method="post">
-                    <input type="text" name="newWord" placeholder="word">
-                    <button class="gameConfigWordButton" type="submit">Set</button>
-                    {% if dfDict|length > 0 %}
-                        <p>current: {{ dfDict[0].get('word') }}</p>
-                    {% endif %}
-                </form>
-             </div>
-            
-            <div class="gameConfigMasterUID">
-                    {% if dfDict|length > 0 %}
-                        <p>current masterUID: {{ dfDict[0].get('masterUID') }}</p>
-                {% else: %} <p>No masterUID</p>
-                    {% endif %}
-                <form class="gameConfigMasterUIDButton" action="/showPlayerTable/changeConfigMasterUID" method="post">
-                    <input type="submit" value="Create masterUID">
-                </form>
-            </div>
-            
-        </div>
-            <form class="nextGameButton" action="/showGame" method="post">
-                <input type="submit" value="Start game">
-            </form>
-            <form class="gameFinish" action="/showPlayerTable/gameFinish" method="post">
-                <input type="submit" value="Finish">
-            </form>
-    </div>
-</div>
-    
-                
+
+
 </body>
 
 </html>

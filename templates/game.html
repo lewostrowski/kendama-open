@@ -9,59 +9,85 @@
 </head>
 
 <body>
-    <div class="kenGame"> 
-        <h2>Ken game</h2>
-        {% if checkWinner == False: %}
-            {% for p in dfDict %}         
-                {% if p.points < p.word|length: %}
-                   <div class="kendamaGamePlayerList">
-                        <div class="kenGameAddPointButton">
-                            <form class="addPoint" action="/showGame/addPoint/{{ dfDict.index(p) }}" method="post">
-                                <input type="submit" value="add point" />
-                            </form>
-                        </div>
+    <div class="kenContainer">
+      <div class="kenHeader">
+        <h1>Game of K.E.N</h1>
+      </div>
 
-                        <div class="kenGameRemovePointButton">
-                            <form class="addPoint" action="/showGame/removePoint/{{ dfDict.index(p) }}" method="post">
-                                <input type="submit" value="remove point" />
-                            </form>
-                        </div>
 
-                        <div class="kenGamePlayerName">
-                            {% if p.points == 0: %}
-                                <p>{{ p.name}} {{ p.surname }}:</p>
-                            {% else: %}
-                                <p>{{ p.name}} {{ p.surname }}: {{ p.word[:p.points] }}</p>
-                            {% endif %}
-                        </div>
-                    </div>
+     <div class="gameViewPlayerList">
+       {% if checkWinner == False: %}
+       {% for p in dfDict %}
+       {% if p.points < p.word|length: %}
+       <div class="gameViewPlayerRow">
+         <div class="playerRowAddPointForm">
+           <form action="/showGame/addPoint/{{ dfDict.index(p) }}" method="post">
+             <div class="playerRowAddPointButton">
+               <input type="submit" value="add point" />
+             </div>
+           </form>
+         </div>
 
-                {% elif p.points == p.word|length %}
-                    <div class="kenGamePlayerList">
-                        <p>{{ p.name}} {{ p.surname }}: {{ p.word }}</p>
-                    </div>
+         <div class="playerRowRemovePointForm">
+           <form action="/showGame/removePoint/{{ dfDict.index(p) }}" method="post">
+             <div class="playerRowRemovePointButton">
+               <input type="submit" value="remove point" />
+             </div>
+           </form>
+         </div>
 
-                     <div class="kenGameRemovePointButton">
-                        <form class="addPoint" action="/showGame/removePoint/{{ dfDict.index(p) }}" method="post">
-                            <input type="submit" value="remove point" />
-                        </form>
-                    </div>
-                {% endif %}
-            {% endfor %}
-        {% elif checkWinner == True: %}
-              {% for p in dfDict: %}
-                  {% if p.end == False: %}
-                    <p>{{ p.name }} {{ p.surname }} won!</p>
-                  {% endif %}
-              {% endfor %}
-              <div class="nextGame">
-                <form class="nextGameButton" action="/showGame/nextGame/{{ dfDict[0].get('masterUID') }}" method="post">
-                    <input type="submit" value="Next game">
-                </form>
-        {% endif %}
-             <form class="goBack" action="/showGame/backToHome/{{ dfDict[0].get('masterUID') }}" method="post">
-                <input type="submit" value="Back to home">
-            </form>
-    </div>
+         <div class="playerRowPlayerName">
+             {% if p.points == 0: %}
+             <div class="playerRowPlayerNameDisplayStart">
+               <p>{{ p.name}} {{ p.surname }}:</p>
+             </div>
+             {% elif p.points == p.word|length %}
+             <div class="playerRowPlayerNameDisplayDroped">
+                 <p>{{ p.name}} {{ p.surname }}: {{ p.word }}</p>
+             </div>
+             {% else: %}
+             <div class="playerRowPlayerNameDisplayActive">
+                 <p>{{ p.name}} {{ p.surname }}: {{ p.word[:p.points] }}</p>
+            </div>
+             {% endif %}
+         </div>
+         </div>
+          {% endif %}
+          {% endfor %}
+          {% elif checkWinner == True: %}
+            {% for p in dfDict: %}
+            {% if p.end == False: %}
+            <div class="gameViewWinner">
+              <p>{{ p.name }} {{ p.surname }} won!</p>
+            </div>
+           {% endif %}
+           {% endfor %}
+         </div>
+
+        <div class="gameViewNav">
+           <div class="gameViewNextGame">
+             <form action="/showGame/nextGame/{{ dfDict[0].get('masterUID') }}" method="post">
+               <div class="gameViewNextGameButton">
+                 <input type="submit" value="Next game">
+               </div>
+             </form>
+           </div>
+           {% endif %}
+           <div class="gameViewFin">
+             <div class="gameViewFinForm">
+               <form action="/showGame/backToHome/{{ dfDict[0].get('masterUID') }}" method="post">
+                 <div class="gameViewFinButton">
+                   <input type="submit" value="Back to home">
+                 </div>
+              </form>
+             </div>
+           </div>
+         </div>
+
+
+      </div>
+
+
+
 </body>
 </html>

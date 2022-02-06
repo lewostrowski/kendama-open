@@ -9,13 +9,22 @@
 </head>
 
 <body>
-    <div class="menu"> 
-        <form class="menuButton" action="/startKenGame" method="post">
-            <input type="submit" value="Ken Game">
-        </form>
-        <form class="menuButton" action="/showStats" method="post">
-            <input type="submit" value="show stats">
-        </form>
+    <div class="indexContainer">
+      <div class="indexHeader">
+        <h1>Kendama-open</h1>
+      </div>
+      <div class="indexMenu">
+        <div class="indexMenuButton">
+          <form class="kenGameButton" action="/startKenGame" method="post">
+              <input type="submit" value="Game of K.E.N">
+          </form>
+        </div>
+        <div class="indexMenuButton">
+          <form class="statsButton" action="/showStats" method="post">
+              <input type="submit" value="Show overall statistics">
+          </form>
+        </div>
+      </div>
     </div>
 </body>
 </html>
