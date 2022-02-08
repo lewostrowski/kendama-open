@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kendama Open</title>
+</head>
+
+<body>
+      <form class="gameFinish" action="/showStats/gameFinish" method="post">
+          <input type="submit" value="Finish">
+      </form>
+        <form class="mainTable" action="/showStats" method="post">
+            <input type="submit" value="mainTable">
+        </form>
+    <!-- main table     -->
+    {% for p in dfDict %}
+    <div class="tableRow">
+      <div class="tableCell">
+        {{ p.masterUID }}
+      </div>
+      <div class="tableCell">
+        {{ p.gameUID }}
+      </div>
+      <div class="tableCell">
+        {{ p.timestamp }}
+      </div>
+      <div class="tableCell">
+        {{ p.name }}
+      </div>
+      <div class="tableCell">
+        {{ p.points }}
+      </div>
+      <div class="tableCell">
+        {{ p.word }}
+      </div>
+      <div class="tableCell">
+        {{ p.end }}
+      </div>
+      <div class="tableCell">
+        {{ p.finGames }}
+      </div>
+    </div>
+    {% endfor %}
+</body>
+</html>

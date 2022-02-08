@@ -33,8 +33,20 @@
           </select>
           <button class="sendButton" type="submit">Filter</button>
         </form>
+
+    <!-- main table     -->
     {% for p in dfDict %}
+    {% if p.end == True %}
     <div class="tableRow">
+      <div class="tableCell">
+        {{ p.masterUID }}
+      </div>
+      <div class="tableCell">
+        {{ p.gameUID }}
+      </div>
+      <div class="tableCell">
+        {{ p.timestamp }}
+      </div>
       <div class="tableCell">
         {{ p.name }}
       </div>
@@ -42,9 +54,17 @@
         {{ p.end }}
       </div>
       <div class="tableCell">
-        {{ p.masterUID }}
+        {{ p.finGames }}
+      </div>
+      <div class="tableCell">
+        <form action="/showStats/showGameDetails/{{ p.masterUID }}" method="post">
+          <div class="tabelCellDetailsButton">
+            <button type='submit'>Show details</button>
+          </div>
+        </form>
       </div>
     </div>
+    {% endif %}
     {% endfor %}
 </body>
 </html>

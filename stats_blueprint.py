@@ -21,6 +21,13 @@ def showStats():
             uniqueNames.append(p.get('name'))
     return render_template('stats.html', dfDict=dfDict, uniqueNames=uniqueNames, tables=[dfFin.to_html()], titles=[''])
 
+@statsBlueprint.route('/showStats/showGameDetails/<string:masterUID>', methods=['POST', 'GET'])
+def showGameDetails(masterUID):
+    df = ko.Table.show(masterLink)
+    dfN = df.loc[df['masterUID'] == masterUID]
+    dfDict = dfN.to_dict('records')
+    return render_template('detailedStats.html', dfDict=dfDict)
+
 @statsBlueprint.route('/showStats/overallWinner', methods=['POST', 'GET'])
 def overallWinner():
     df = ko.Stats.overallWinner(masterLink)

@@ -49,7 +49,7 @@ def changeConfigWord():
 
 @tableBlueprint.route('/showPlayerTable/changeConfigMasterUID', methods=['POST', 'GET'])
 def changeConfigMasterUID():
-    newUID = uuid.uuid4()
+    newUID = uuid.uuid4().time
     df = ko.Table.show(playerTableLink)
     df['masterUID'] = newUID
     df.to_csv(playerTableLink, index=False)
@@ -57,7 +57,7 @@ def changeConfigMasterUID():
 
 #GAME FUNCTIONS
 @tableBlueprint.route('/showPlayerTable/gameFinish', methods=['POST', 'GET'])
-def gameFinish():        
+def gameFinish():
     df = ko.Table.create()
     df.to_csv(playerTableLink, index=False)
     return redirect(url_for('showHome'))
