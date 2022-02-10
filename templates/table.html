@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kendama Open</title>
 </head>
@@ -104,19 +104,15 @@
     </div>
 
     <div class="tableGameNav">
-      <div class="gamNavNextForm">
+      <div class="gamNavButton">
         <form action="/showGame" method="post">
-          <div class="gameNavNextButton">
             <input type="submit" value="Start game">
-          </div>
         </form>
       </div>
-      <div class="gameNavFinForm">
-        <div class="gameNavFinButton">
+      <div class="gamNavButton">
           <form action="/showPlayerTable/gameFinish" method="post">
               <input type="submit" value="Finish">
           </form>
-        </div>
       </div>
     </div>
 
