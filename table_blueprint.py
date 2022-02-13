@@ -12,8 +12,8 @@ masterLink = 'csv/masterTable.csv'
 def showPlayerTable():
     df = ko.Table.show(playerTableLink)
     dfDict = df.to_dict('records')
-    dfFin = df[['name', 'points', 'word', 'gameUID', 'winGames', 'finGames', 'end', 'masterUID']]
-    return render_template('table.html', dfDict=dfDict, checkWinner=ko.Game.checkForWinner(dfDict), tables=[dfFin.to_html()], titles=[''])
+    dfTable = df[['name', 'winGames', 'finGames', 'masterUID']].to_dict()
+    return render_template('table.html', dfDict=dfDict, checkWinner=ko.Game.checkForWinner(dfDict), dfTable=dfTable, titles=[''])
 
 #PLAYER TABLE
 @tableBlueprint.route('/showPlayerTable/addPlayer', methods=['POST', 'GET'])
