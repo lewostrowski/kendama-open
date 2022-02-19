@@ -154,3 +154,122 @@ class Stats:
         df = df.loc[df['masterUID'].isin(dfMap)]
         dfDict = df.to_dict('records')
         return dfDict
+
+
+class dev:
+        playersDict = {
+        'Jack': {
+            'skills': 3,
+            'freq': 9
+        },
+        'Mike': {
+            'skills': 5,
+            'freq': 8
+        },
+        'Anna': {
+            'skills': 3,
+            'freq': 5
+        },
+        'Braian': {
+            'skills': 5,
+            'freq': 5
+        },
+        'Jessica': {
+            'skills': 4,
+            'freq': 7
+        },
+        'Sonia': {
+            'skills': 6,
+            'freq': 3
+        },
+    }
+
+    def devFreq(playersDict):
+        for p in playersDict:
+            playerFreq = playersDict[p].get('freq')
+            playerFreq = playerFreq * random.randint(1,6)
+            playersDict[p].update({'gameFreq': playerFreq})
+        return playersDict
+
+    def devSkill(playersDict, randomFacto=True):
+        for p in playersDict:
+            playerSkill = playersDict[p].get('skills')
+            playerSkill = playerSkill * random.randint(1,5)
+            if randomFacto == True: playerSkill += random.randint(-5,5)
+            playersDict[p].update({'gameSkills': playerSkill})
+        return playersDict
+
+    def devGame(playersDict, pArray=[]):
+        if len(pArray) == 0:
+            pDict = devFreq(playersDict)
+            pDict = devSkill(playersDict)
+            gamePopulation = random.randint(2,len(pDict)) 
+
+            pFreq = []
+            for p in pDict: pFreq.append(pDict[p].get('gameFreq'))
+            while len(pFreq) > gamePopulation: pFreq.pop(pFreq.index(min(pFreq)))
+
+            game = {
+                'name': [],
+                'winner': [],
+                'points': []
+            } 
+
+            for p in pDict: 
+                if pDict[p].get('gameFreq') in pFreq: game['name'].append(p)
+
+        elif len(pArray) > 1:
+            pDict = devSkill(playersDict)
+
+            game = {
+                'name': pArray,
+                'winner': [],
+                'points': []
+            } 
+
+        pSkill = []
+        for p in game['name']: pSkill.append(pDict[p].get('gameSkills'))
+        for p in game['name']: 
+            if pDict[p].get('gameSkills') == max(pSkill): game['winner'].append(True)
+            else: game['winner'].append(False)
+
+        for p in game['name']:
+            pIndex = game['name'].index(p)
+            if game['winner'][pIndex] == True: game['points'].append(random.randint(0,2))
+            else: game['points'].append(3)
+
+        return game
+
+    def devSession(maxRounds=6):
+        gameRounds = random.randint(1,maxRounds)
+        game = devGame(playersDict)
+
+        game.update({'gameUID': 0})
+        dfN = pd.DataFrame.from_dict(game)
+
+        roundsLeft = gameRounds-1
+        if gameRounds > 1:
+            while roundsLeft != 0:
+                nextGame = devGame(playersDict, pArray=game['name'])
+                nextGame.update({'gameUID': roundsLeft})
+                dfNext = pd.DataFrame.from_dict(nextGame)
+                dfN = pd.concat([dfN, dfNext])
+                roundsLeft -= 1
+
+        masterUID = uuid.uuid4().time
+        dfN['masterUID'] = masterUID
+        return dfN
+
+    def devGenerateTable(sessionNumber=20):
+        n = 1
+        df = devSession()
+        while n < sessionNumber:
+            dfT = devSession()
+            df = pd.concat([df, dfT])
+            n += 1
+        for n in df['masterUID']:
+            dfN = df.loc[df['masterUID'] == n]
+            dfCount = dfN['gameUID'].nunique()
+            df.loc[df['masterUID'] == n, 'finGames'] = dfCount
+        df['finGames'] = df['finGames'].astype(int)
+        df.to_csv('csv/playerModel.csv', index=False)
