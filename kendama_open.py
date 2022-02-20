@@ -232,7 +232,7 @@ class dev:
         pSkill = []
         for p in game['name']: pSkill.append(pDict[p].get('gameSkills'))
         for p in game['name']: 
-            if pDict[p].get('gameSkills') == max(pSkill): game['winner'].append(True)
+            if pDict[p].get('gameSkills') == max(pSkill) and game['winner'].count(True) == 0: game['winner'].append(True)
             else: game['winner'].append(False)
 
         for p in game['name']:

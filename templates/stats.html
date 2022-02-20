@@ -70,13 +70,12 @@
               <td>{{ h.winner }}</td>
               <td>{{ h.points }}</td>
               <td>{{ h.gameUID }}</td>
-              <td>{{ h.masterUID }}</td>
-              <td>{{ h.finGames }}</td>
-              <td>
+              <td>{{ h.masterUID }}
                 <form action="/showStats/showGameDetails/{{ h.masterUID }}" method="post">
-                    <button class="btn btn-dark" type='submit'>Show game details</button>
-                </form>
+                  <button class="btn btn-dark" type='submit'>Show game details</button>
+              </form>
               </td>
+              <td>{{ h.finGames }}</td>
             </tr>
             {% endif %}
             {% endfor %}
