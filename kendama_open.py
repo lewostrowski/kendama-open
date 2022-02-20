@@ -157,6 +157,7 @@ class Stats:
 
 
 class dev:
+    def returnPlayerDict():
         playersDict = {
         'Jack': {
             'skills': 3,
@@ -181,8 +182,9 @@ class dev:
         'Sonia': {
             'skills': 6,
             'freq': 3
-        },
-    }
+        }
+        }
+        return playersDict
 
     def devFreq(playersDict):
         for p in playersDict:

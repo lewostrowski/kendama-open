@@ -18,66 +18,64 @@
       </div>
 
        {% if checkWinner == False: %}
-       {% for p in dfDict %}
-       {% if p.points < p.word|length: %}
-       <div class="row">
-         <div class="col">
-           <div class="d-inline-flex p-2 align-items-baseline">
-             <div class="p-1">
-               <form action="/showGame/addPoint/{{ dfDict.index(p) }}" method="post">
-                   <button type="submit" class='btn btn-dark btn-lg'>+1</button>
-               </form>
-            </div>
-            <div class="p-1">
-                <form action="/showGame/removePoint/{{ dfDict.index(p) }}" method="post">
-                    <button type="submit" class='btn btn-dark btn-lg'>-1</button>
-                </form>
-            </div>
-            <div class="p-1">
-               {% if p.points == 0: %}
-                 <p>{{ p.name}} {{ p.surname }}:</p>
-               {% elif p.points == p.word|length %}
-                 <p>{{ p.name}} {{ p.surname }}: {{ p.word }}</p>
-               {% else: %}
-                 <p>{{ p.name}} {{ p.surname }}: {{ p.word[:p.points] }}</p>
-               {% endif %}
-            </div>
-          </div>
-         </div>
+        {% for p in dfDict %}
+        <div class="row">
+          {% if p.points < p.word|length: %}
+          
+            
+              <div class="d-inline-flex p-2 align-items-baseline justify-content-center">
+                <div class="p-1">
+                  <form action="/showGame/addPoint/{{ dfDict.index(p) }}" method="post">
+                      <button type="submit" class='btn btn-dark btn-lg'>+1</button>
+                  </form>
+                </div>
+                <div class="p-1">
+                    <form action="/showGame/removePoint/{{ dfDict.index(p) }}" method="post">
+                        <button type="submit" class='btn btn-dark btn-lg'>-1</button>
+                    </form>
+                </div>
+                <div class="p-1">
+                  {% if p.points == 0: %}
+                    <p>{{ p.name}} {{ p.surname }}:</p>
+                  {% elif p.points == p.word|length %}
+                    <p>{{ p.name}} {{ p.surname }}: {{ p.word }}</p>
+                  {% else: %}
+                    <p>{{ p.name}} {{ p.surname }}: {{ p.word[:p.points] }}</p>
+                  {% endif %}
+                </div>
+              </div>
+            
 
 
-       {% endif %}
-       {% endfor %}
-      </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+
 
       {% elif checkWinner == True: %}
         {% for p in dfDict: %}
         {% if p.end == False: %}
-          <p>{{ p.name }} {{ p.surname }} won!</p>
+          <p class='h3 text-center'>{{ p.name }} {{ p.surname }} won!</p>
        {% endif %}
        {% endfor %}
          </div>
 
-        <div class="gameViewNav">
-           <div class="gameViewNextGame">
+        <div class="row justify-content-center">
+           <div class="col-6">
              <form action="/showGame/nextGame/{{ dfDict[0].get('masterUID') }}" method="post">
-               <div class="gameViewNextGameButton">
-                 <input type="submit" value="Next game">
-               </div>
-             </form>
-           </div>
-           {% endif %}
-           <div class="gameViewFin">
-             <div class="gameViewFinForm">
-               <form action="/showGame/backToHome/{{ dfDict[0].get('masterUID') }}" method="post">
-                 <div class="gameViewFinButton">
-                   <input type="submit" value="Back to home">
-                 </div>
-              </form>
+              <div class="d-grid p-2">
+                 <buton type="submit" class='btn btn-dark btn-block'>Next game</buton>
              </div>
-           </div>
+                </form>
+           
+           {% endif %}
+               <form action="/showGame/backToHome/{{ dfDict[0].get('masterUID') }}" method="post">
+                <div class="d-grid p-2">
+                   <button type="submit" class='btn btn-dark btn-block'>Back to home</button>
+                </div>
+              </form>
          </div>
-
+        </div>
 
       </div>
 

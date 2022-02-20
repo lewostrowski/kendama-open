@@ -14,7 +14,7 @@ app.register_blueprint(tableBlueprint)
 app.register_blueprint(statsBlueprint)
 
 playerTableLink = 'csv/playerTable.csv'
-masterLink = 'csv/masterTable.csv'
+masterLink = 'csv/playerModel.csv'
 
 #HOMES
 @app.route('/')

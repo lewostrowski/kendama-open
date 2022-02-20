@@ -6,20 +6,20 @@ import kendama_open as ko
 
 statsBlueprint = Blueprint('stats_blueprint', __name__)
 playerTableLink = 'csv/playerTable.csv'
-masterLink = 'csv/masterTable.csv'
+masterLink = 'csv/playerModel.csv'
 
 ## ŻEBY TO SIĘ SENSOWNIE FILTROWAŁO MUSI POWSTAWAĆ OSOBNE CSV Z WIDOKIEM
 
 @statsBlueprint.route('/showStats')
 def showStats():
     df = ko.Table.show(masterLink)
-    dfDict = df.to_dict('records')
-    dfFin = df[['name', 'points', 'word', 'gameUID', 'winGames', 'finGames', 'end', 'masterUID', 'timestamp']]
+    dfDict = df.to_dict()
+    dfDictR = df.to_dict('records')
     uniqueNames = []
-    for p in dfDict:
+    for p in dfDictR:
         if p.get('name') not in uniqueNames:
             uniqueNames.append(p.get('name'))
-    return render_template('stats.html', dfDict=dfDict, uniqueNames=uniqueNames, tables=[dfFin.to_html()], titles=[''])
+    return render_template('stats.html', dfDict=dfDict, dfDictR=dfDictR, uniqueNames=uniqueNames)
 
 @statsBlueprint.route('/showStats/showGameDetails/<string:masterUID>', methods=['POST', 'GET'])
 def showGameDetails(masterUID):
