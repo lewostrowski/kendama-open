@@ -6,3 +6,4 @@ Do zrobienia:
 * unifikacja + optymalizacja
 * przechowywanie danych + autoryzacja dostępu
 * tournament mode
+* wyrzucić ustawienia gry do osobnej tabeli
