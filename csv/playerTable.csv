@@ -1,1 +1,3 @@
-name,points,word,gameUID,winGames,finGames,end,masterUID
+name,points,word,gameUID,winGames,finGames,winner,masterUID,turnControl,end
+Mikołaj,0,ken,1,0,1,False,0,True,True
+Matwiej,0,ken,1,0,1,False,0,True,False

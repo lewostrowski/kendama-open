@@ -12,7 +12,8 @@ masterLink = 'csv/masterTable.csv'
 def showPlayerTable():
     df = ko.Table.show(playerTableLink)
     dfDict = df.to_dict('records')
-    dfTable = df[['name', 'winGames', 'finGames', 'masterUID']].to_dict()
+    dfTable = df[['name', 'winGames', 'finGames', 'masterUID']].rename(columns={'name':'Name', 'winGames':'Games won', 'finGames':'Games finished', 'masterUID':'Game ID (ranked only)'})
+    dfTable = dfTable.to_dict()
     return render_template('table.html', dfDict=dfDict, checkWinner=ko.Game.checkForWinner(dfDict), dfTable=dfTable, titles=[''])
 
 #PLAYER TABLE
@@ -54,6 +55,17 @@ def changeConfigMasterUID():
     df['masterUID'] = newUID
     df.to_csv(playerTableLink, index=False)
     return redirect(url_for('table_blueprint.showPlayerTable'))
+
+@tableBlueprint.route('/showPlayerTable/changeConfigTrunControl', methods=['POST', 'GET'])
+def changeConfigTrunControl():
+    status = request.form.get('turnControl')
+    df = ko.Table.show(playerTableLink)
+    if status == 'True': df['turnControl'] = True
+    else: df['turnControl'] = False
+    print(df)
+    df.to_csv(playerTableLink, index=False)
+    return redirect(url_for('table_blueprint.showPlayerTable'))
+
 
 #GAME FUNCTIONS
 @tableBlueprint.route('/showPlayerTable/gameFinish', methods=['POST', 'GET'])

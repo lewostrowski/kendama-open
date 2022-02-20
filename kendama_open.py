@@ -4,7 +4,7 @@ from datetime import datetime
 
 class Table:
     def create():
-        df = pd.DataFrame(columns=[['name', 'points', 'word', 'gameUID', 'winGames', 'finGames', 'end', 'masterUID']])
+        df = pd.DataFrame(columns=[['name', 'points', 'word', 'gameUID', 'winGames', 'finGames', 'winner', 'masterUID', 'turnControl']])
         return df
 
     def show(tableLink=0):
@@ -22,8 +22,9 @@ class Table:
         userInput.update({'gameUID':0})
         userInput.update({'winGames':0})
         userInput.update({'finGames':0})
-        userInput.update({'end':False})
+        userInput.update({'winner':False})
         userInput.update({'masterUID':0})
+        userInput.update({'turnControl':False})
         return userInput
 
     def removePlayer(tableName, pIndex):
@@ -81,6 +82,7 @@ class Game:
         return df
 
     def checkForWinner(playerDict):
+        print(playerDict)
         playerLeft = []
         for p in playerDict:
             if p.get('points') == len(p.get('word')):
@@ -110,11 +112,11 @@ class Game:
                 newVal += 1
                 p.update({'gameUID':newVal})
 
-                if p.get('end') == False:
+                if p.get('winner') == True:
                     newVal = p.get('winGames')
                     newVal += 1
                     p.update({'winGames':newVal})
-                else: p.update({'end':False})
+                else: p.update({'winner':False})
 
         elif hardReset == True:
             for p in playerDict:
@@ -137,8 +139,8 @@ class Stats:
 
     def overallWinner(tableLink):
         df = Table.show(tableLink)
-        df = df.loc[df['end'] == False]
-        dfN = df[['name', 'end']].groupby('name').count().sort_values('end', ascending=False)
+        df = df.loc[df['winner'] == True]
+        dfN = df[['name', 'winner']].groupby('name').count().sort_values('winner', ascending=False)
         dfDict = dfN.to_dict()
         return dfDict
 
