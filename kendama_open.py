@@ -14,6 +14,20 @@ class Table:
             df = pd.read_csv(tableLink)
             return df
 
+    def createGameContro(controlLink):
+        defaultControl = {
+            'masterUID': [0],
+            'word': ['ken'],
+            'turnControl': [False]
+        }
+        dfControl = pd.DataFrame.from_dict(defaultControl)
+        dfControl.to_csv(controlLink)
+        return dfControl
+
+    def readGameControl(controlLink):
+        df = pd.read_csv(controlLink)
+        return df
+
     def addPlayer(tableName, playerData):
         userInput = {}
         userInput.update({'name':playerData})
@@ -93,7 +107,7 @@ class Game:
         else: finish = False
         return finish
 
-    def resetGame(playerDict, masterUID=0, exclude=0):
+    def resetGame(playerDict, masterUID=0, exclude=0, controlLink='csv/gameControl.csv'):
         hardReset = False
 
         for p in playerDict:
@@ -124,8 +138,11 @@ class Game:
                 p.update({'gameUID':0})
                 p.update({'winGames':0})
                 p.update({'finGames':0})
-                p.update({'end':False})
+                p.update({'winner':False})
                 p.update({'masterUID':0})
+
+            resetControl = Table.createGameContro(controlLink)
+            resetControl.to_csv(controlLink, index=False)
         return playerDict
 
 class Stats:

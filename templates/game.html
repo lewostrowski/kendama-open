@@ -20,7 +20,7 @@
        {% if checkWinner == False: %}
         {% for p in dfDict %}
         <div class="row">
-          {% if p.points < p.word|length: %}
+          {% if p.points < dfControl[0].get('word')|length %}
           
             
               <div class="d-inline-flex p-2 align-items-baseline justify-content-center">
@@ -37,10 +37,10 @@
                 <div class="p-1">
                   {% if p.points == 0: %}
                     <p>{{ p.name}} {{ p.surname }}:</p>
-                  {% elif p.points == p.word|length %}
-                    <p>{{ p.name}} {{ p.surname }}: {{ p.word }}</p>
+                  {% elif p.points == dfControl[0].get('word')|length %}
+                    <p>{{ p.name}} {{ p.surname }}: {{ dfControl[0].get('word') }}</p>
                   {% else: %}
-                    <p>{{ p.name}} {{ p.surname }}: {{ p.word[:p.points] }}</p>
+                    <p>{{ p.name}} {{ p.surname }}: {{ dfControl[0].get('word')[:p.points] }}</p>
                   {% endif %}
                 </div>
               </div>
@@ -54,7 +54,7 @@
 
       {% elif checkWinner == True: %}
         {% for p in dfDict: %}
-        {% if p.end == False: %}
+        {% if p.winner == True: %}
           <p class='h3 text-center'>{{ p.name }} {{ p.surname }} won!</p>
        {% endif %}
        {% endfor %}
@@ -62,14 +62,14 @@
 
         <div class="row justify-content-center">
            <div class="col-6">
-             <form action="/showGame/nextGame/{{ dfDict[0].get('masterUID') }}" method="post">
+             <form action="/showGame/nextGame/{{ dfControl[0].get('masterUID') }}" method="post">
               <div class="d-grid p-2">
                  <buton type="submit" class='btn btn-dark btn-block'>Next game</buton>
              </div>
                 </form>
            
            {% endif %}
-               <form action="/showGame/backToHome/{{ dfDict[0].get('masterUID') }}" method="post">
+               <form action="/showGame/backToHome/{{ dfControl[0].get('masterUID') }}" method="post">
                 <div class="d-grid p-2">
                    <button type="submit" class='btn btn-dark btn-block'>Back to home</button>
                 </div>

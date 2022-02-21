@@ -7,23 +7,25 @@ import kendama_open as ko
 gameBlueprint = Blueprint('game_blueprint', __name__)
 playerTableLink = 'csv/playerTable.csv'
 masterLink = 'csv/masterTable.csv'
+controlLink = 'csv/gameControl.csv'
 
 #GAME
 @gameBlueprint.route('/showGame', methods=['POST', 'GET'])
 def showGame():
     df = ko.Table.show(playerTableLink)
     dfDict = df.to_dict('records')
-    for p in dfDict:
-        equalToFirst = dfDict[0].get('word')
-        p.update({'word':equalToFirst})
-    return render_template('game.html', dfDict=dfDict, checkWinner=ko.Game.checkForWinner(dfDict))
+    dfControl = ko.Table.readGameControl(controlLink)
+    dfControl = dfControl.to_dict('records')
+    return render_template('game.html', dfDict=dfDict, dfControl=dfControl, checkWinner=ko.Game.checkForWinner(dfDict))
 
 @gameBlueprint.route('/showGame/addPoint/<int:pIndex>', methods=['POST', 'GET'])
 def addPoint(pIndex):
     df = ko.Game.addPoint(playerTableLink, pIndex)
     dfDict = df.to_dict('records')
+    dfControl = ko.Table.readGameControl(controlLink)
+    dfControl = dfControl.to_dict('records')
     for p in dfDict:
-        if p.get('points') == len(p.get('word')): p.update({'end':True})
+        if p.get('points') == len(dfControl[0].get('word')): p.update({'winner':True})
     df = pd.DataFrame(dfDict)
     df.to_csv(playerTableLink, index=False)
     return redirect(url_for('game_blueprint.showGame'))

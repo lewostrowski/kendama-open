@@ -7,6 +7,7 @@ import kendama_open as ko
 tableBlueprint = Blueprint('table_blueprint', __name__)
 playerTableLink = 'csv/playerTable.csv'
 masterLink = 'csv/masterTable.csv'
+controlLink = 'csv/gameControl.csv'
 
 @tableBlueprint.route('/showPlayerTable')
 def showPlayerTable():
@@ -14,7 +15,9 @@ def showPlayerTable():
     dfDict = df.to_dict('records')
     dfTable = df[['name', 'winGames', 'finGames', 'masterUID']].rename(columns={'name':'Name', 'winGames':'Games won', 'finGames':'Games finished', 'masterUID':'Game ID (ranked only)'})
     dfTable = dfTable.to_dict()
-    return render_template('table.html', dfDict=dfDict, checkWinner=ko.Game.checkForWinner(dfDict), dfTable=dfTable, titles=[''])
+    dfControl = ko.Table.readGameControl(controlLink)
+    dfControl = dfControl.to_dict('records')
+    return render_template('table.html', dfDict=dfDict, checkWinner=ko.Game.checkForWinner(dfDict), dfTable=dfTable, dfControl=dfControl)
 
 #PLAYER TABLE
 @tableBlueprint.route('/showPlayerTable/addPlayer', methods=['POST', 'GET'])
@@ -43,27 +46,27 @@ def removePlayer(pIndex):
 #CONFIG
 @tableBlueprint.route('/showPlayerTable/changeConfigWord', methods=['POST', 'GET'])
 def changeConfigWord():
-    df = ko.Table.show(playerTableLink)
-    df['word'] = request.form.get('newWord')
-    df.to_csv(playerTableLink, index=False)
+    dfControl = ko.Table.readGameControl(controlLink)
+    dfControl['word'] = request.form.get('newWord')
+    dfControl.to_csv(controlLink, index=False)
     return redirect(url_for('table_blueprint.showPlayerTable'))
 
 @tableBlueprint.route('/showPlayerTable/changeConfigMasterUID', methods=['POST', 'GET'])
 def changeConfigMasterUID():
     newUID = uuid.uuid4().time
-    df = ko.Table.show(playerTableLink)
-    df['masterUID'] = newUID
-    df.to_csv(playerTableLink, index=False)
+    dfControl = ko.Table.readGameControl(controlLink)
+    dfControl['masterUID'] = newUID
+    print(dfControl)
+    dfControl.to_csv(controlLink, index=False)
     return redirect(url_for('table_blueprint.showPlayerTable'))
 
 @tableBlueprint.route('/showPlayerTable/changeConfigTrunControl', methods=['POST', 'GET'])
 def changeConfigTrunControl():
     status = request.form.get('turnControl')
-    df = ko.Table.show(playerTableLink)
-    if status == 'True': df['turnControl'] = True
-    else: df['turnControl'] = False
-    print(df)
-    df.to_csv(playerTableLink, index=False)
+    dfControl = ko.Table.readGameControl(controlLink)
+    if status == 'True': dfControl['turnControl'] = True
+    else: dfControl['turnControl'] = False
+    dfControl.to_csv(controlLink, index=False)
     return redirect(url_for('table_blueprint.showPlayerTable'))
 
 

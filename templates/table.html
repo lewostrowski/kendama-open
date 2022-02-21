@@ -53,13 +53,13 @@
         <div id="config" class="collapse hide pb-1">
             {% if dfDict|length > 0 %}
               <form action="/showPlayerTable/changeConfigWord" method="post">
-                <input type="text" name="newWord" placeholder="{{ dfDict[0].get('word') }}">
+                <input type="text" name="newWord" placeholder="{{ dfControl[0].get('word') }}">
                 <button class="btn btn-dark" type="submit">Set</button>
               </form>
 
               <form action="/showPlayerTable/changeConfigTrunControl" method="post">
                 
-                {% if dfDict[0].get('turnControl') == True %}
+                {% if dfControl[0].get('turnControl') == True %}
                 <p>Turn control: ON</p>
                 <button class="btn btn-dark" type="submit" value="False" name="turnControl">Disable</button>
                 {% else %}
@@ -68,8 +68,8 @@
                 {% endif %}
               </form>
 
-              {% if dfDict|length > 0 and dfDict[0].get('masterUID') != 0 %}
-              Current masterUID: {{ dfDict[0].get('masterUID') }}
+              {% if dfDict|length > 0 and dfControl[0].get('masterUID') != 0 %}
+              Current masterUID: {{ dfControl[0].get('masterUID') }}
               {% else: %}
                 <form class="cofigMasterInput" action="/showPlayerTable/changeConfigMasterUID" method="post">
                   Current masterUID: None
