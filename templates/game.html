@@ -58,17 +58,18 @@
           <p class='h3 text-center'>{{ p.name }} {{ p.surname }} won!</p>
        {% endif %}
        {% endfor %}
-         </div>
+         
 
         <div class="row justify-content-center">
            <div class="col-6">
-             <form action="/showGame/nextGame/{{ dfControl[0].get('masterUID') }}" method="post">
+            <form action="/showGame/nextGame/{{ dfControl[0].get('masterUID') }}" method="post">
               <div class="d-grid p-2">
-                 <buton type="submit" class='btn btn-dark btn-block'>Next game</buton>
-             </div>
-                </form>
+                 <button type="submit" class='btn btn-dark btn-block'>Next game</button>
+              </div>
+            </form>
            
            {% endif %}
+
                <form action="/showGame/backToHome/{{ dfControl[0].get('masterUID') }}" method="post">
                 <div class="d-grid p-2">
                    <button type="submit" class='btn btn-dark btn-block'>Back to home</button>
@@ -78,7 +79,7 @@
         </div>
 
       </div>
-
+    </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

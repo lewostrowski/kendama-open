@@ -1,2 +1,6 @@
-masterUID,word,turnControl
-0,ken,False
+masterUID,word,turnControl,gameUID,winner,winnerPoints
+0,ken,False,0,,
+0,ken,False,1,a,0.0
+0,ken,False,2,a,0.0
+0,ken,False,3,b,0.0
+0,ken,False,4,b,0.0

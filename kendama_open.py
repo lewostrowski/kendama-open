@@ -4,7 +4,7 @@ from datetime import datetime
 
 class Table:
     def create():
-        df = pd.DataFrame(columns=[['name', 'points', 'word', 'gameUID', 'winGames', 'finGames', 'winner', 'masterUID', 'turnControl']])
+        df = pd.DataFrame(columns=[['name', 'points', 'masterUID', 'gamesWon']])
         return df
 
     def show(tableLink=0):
@@ -14,14 +14,16 @@ class Table:
             df = pd.read_csv(tableLink)
             return df
 
-    def createGameContro(controlLink):
+    def createGameControl(controlLink):
         defaultControl = {
             'masterUID': [0],
             'word': ['ken'],
-            'turnControl': [False]
+            'turnControl': [False],
+            'gameUID': [0],
+            'winner':[None]
         }
         dfControl = pd.DataFrame.from_dict(defaultControl)
-        dfControl.to_csv(controlLink)
+        dfControl.to_csv(controlLink, index=False)
         return dfControl
 
     def readGameControl(controlLink):
@@ -32,31 +34,26 @@ class Table:
         userInput = {}
         userInput.update({'name':playerData})
         userInput.update({'points':0})
-        userInput.update({'word':'KEN'})
-        userInput.update({'gameUID':0})
-        userInput.update({'winGames':0})
-        userInput.update({'finGames':0})
-        userInput.update({'winner':False})
+        userInput.update({'gamesWon':0})
         userInput.update({'masterUID':0})
-        userInput.update({'turnControl':False})
         return userInput
 
     def removePlayer(tableName, pIndex):
         tableName = tableName.drop(index=int(pIndex))
         return tableName
 
-    def saveToMaster(playerDict):
-        saveResults = True
-        for p in playerDict:
-            if p.get('masterUID') == 0: saveResults = False
+    # def saveToMaster(playerDict):
+    #     saveResults = True
+    #     for p in playerDict:
+    #         if p.get('masterUID') == 0: saveResults = False
 
-        if saveResults == True:
-            timeStamp = datetime.now()
-            timeStamp = timeStamp.strftime('%Y-%m-%d %H:%M')
-            for p in playerDict: p.update({'timeStamp':timeStamp})
-            dfN = pd.DataFrame(playerDict)
-        else: dfN = False
-        return dfN
+    #     if saveResults == True:
+    #         timeStamp = datetime.now()
+    #         timeStamp = timeStamp.strftime('%Y-%m-%d %H:%M')
+    #         for p in playerDict: p.update({'timeStamp':timeStamp})
+    #         dfN = pd.DataFrame(playerDict)
+    #     else: dfN = False
+    #     return dfN
 
 
 class Group:
@@ -95,11 +92,11 @@ class Game:
         df.loc[df.index == pIndex, 'points'] -= 1
         return df
 
-    def checkForWinner(playerDict):
+    def checkForWinner(playerDict, gameControl):
         print(playerDict)
         playerLeft = []
         for p in playerDict:
-            if p.get('points') == len(p.get('word')):
+            if p.get('points') == len(gameControl[0].get('word')):
                 playerLeft.append(playerDict.index(p))
         if len(playerLeft) < len(playerDict)-1 and len(playerDict) > 1: finish = False
         elif len(playerLeft) == len(playerDict)-1  and len(playerDict) > 1:
@@ -107,38 +104,40 @@ class Game:
         else: finish = False
         return finish
 
-    def resetGame(playerDict, masterUID=0, exclude=0, controlLink='csv/gameControl.csv'):
+    def resetGame(playerDict, gameControl, controlLink='csv/gameControl.csv', nextGame=True):
         hardReset = False
 
         for p in playerDict:
-            if p.get('masterUID') == '0' or masterUID == 0:
+            if (gameControl[0].get('masterUID') == 0) and nextGame == False:
                 hardReset = True
 
-        if hardReset == False:
+        if hardReset == False: 
             for p in playerDict:
-                p.update({'points':0})
+                if p.get('points') < len(gameControl[-1].get('word')):
+                   winnerName = p.get('name')
+                   winnerPoints = p.get('points')
+                   gamesWon = p.get('gamesWon') + 1
+                   p.update({'gamesWon':gamesWon})
+                else: p.update({'points':0})
 
-                newVal = p.get('finGames')
-                newVal += 1
-                p.update({'finGames':newVal})
+            gameUID = gameControl[-1].get('gameUID') + 1
 
-                newVal = p.get('gameUID')
-                newVal += 1
-                p.update({'gameUID':newVal})
 
-                if p.get('winner') == True:
-                    newVal = p.get('winGames')
-                    newVal += 1
-                    p.update({'winGames':newVal})
-                else: p.update({'winner':False})
+            saveGame = {
+                'masterUID':gameControl[-1].get('masterUID'),
+                'word':gameControl[-1].get('word'),
+                'turnControl':gameControl[-1].get('turnControl'),
+                'gameUID':gameUID,
+                'winner': winnerName,
+                'winnerPoints': int(winnerPoints)
+            }
 
+            gameControl.append(saveGame)
+            df = pd.DataFrame(gameControl)
+            df.to_csv(controlLink, index=False)
         elif hardReset == True:
             for p in playerDict:
                 p.update({'points':0})
-                p.update({'gameUID':0})
-                p.update({'winGames':0})
-                p.update({'finGames':0})
-                p.update({'winner':False})
                 p.update({'masterUID':0})
 
             resetControl = Table.createGameContro(controlLink)
@@ -163,8 +162,8 @@ class Stats:
 
     def timeWinner(tableLink, startDate=0, startTime='00:00', endDate=0, endTime='23:59'):
         df = Table.show(tableLink)
-        dfFilter = filterByDate(df, startDate, startTime, endDate, endTime)
-        dfDict = overallWinner(dfFilter)
+        dfFilter = Stats.filterByDate(df, startDate, startTime, endDate, endTime)
+        dfDict = Stats.overallWinner(dfFilter)
         return dfDict
 
     def filterByName(df, playerName):
@@ -175,7 +174,7 @@ class Stats:
         return dfDict
 
 
-class dev:
+class Dev:
     def returnPlayerDict():
         playersDict = {
         'Jack': {
@@ -222,8 +221,8 @@ class dev:
 
     def devGame(playersDict, pArray=[]):
         if len(pArray) == 0:
-            pDict = devFreq(playersDict)
-            pDict = devSkill(playersDict)
+            pDict = Dev.devFreq(playersDict)
+            pDict = Dev.devSkill(playersDict)
             gamePopulation = random.randint(2,len(pDict)) 
 
             pFreq = []
@@ -240,7 +239,7 @@ class dev:
                 if pDict[p].get('gameFreq') in pFreq: game['name'].append(p)
 
         elif len(pArray) > 1:
-            pDict = devSkill(playersDict)
+            pDict = Dev.devSkill(playersDict)
 
             game = {
                 'name': pArray,
@@ -263,7 +262,7 @@ class dev:
 
     def devSession(maxRounds=6):
         gameRounds = random.randint(1,maxRounds)
-        game = devGame(playersDict)
+        game = Dev.devGame(playersDict)
 
         game.update({'gameUID': 0})
         dfN = pd.DataFrame.from_dict(game)
@@ -271,7 +270,7 @@ class dev:
         roundsLeft = gameRounds-1
         if gameRounds > 1:
             while roundsLeft != 0:
-                nextGame = devGame(playersDict, pArray=game['name'])
+                nextGame = Dev.devGame(playersDict, pArray=game['name'])
                 nextGame.update({'gameUID': roundsLeft})
                 dfNext = pd.DataFrame.from_dict(nextGame)
                 dfN = pd.concat([dfN, dfNext])
@@ -283,9 +282,9 @@ class dev:
 
     def devGenerateTable(sessionNumber=20):
         n = 1
-        df = devSession()
+        df = Dev.devSession()
         while n < sessionNumber:
-            dfT = devSession()
+            dfT = Dev.devSession()
             df = pd.concat([df, dfT])
             n += 1
         for n in df['masterUID']:

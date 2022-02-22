@@ -103,25 +103,29 @@
     <div class="row pt-5">
       <div class="col-12">
         <p class='h3 text-lowercase'>game config</p>
-
+        <p>{{ dfControl }}</p>
         <table class="table table-bordered table-hover">
           <thead>
             <tr>
-              {% for h in dfTable %}
-              <th>{{ h }}</th>
-              {% endfor %}
+              <th>Name</th>
+              <th>Master UID</th>
+              <th>Games played</th>
+              <th>GamesWOn</th>
             </tr>
           </thead>
           <tbody>
 
             {% for h in dfDict %}
+            
             <tr>
-              <td>{{ h.name }}</td>
-              <td>{{ h.winGames }}</td>
-              <td>{{ h.finGames }}</td>
-              <td>{{ h.masterUID }}</td>
+              <td>{{ h.get('name') }}</td>
+              <td>{{ h.get('masterUID') }}</td>
+              <td>{{ dfControl[-1].get('gameUID') }}</td>
+              <td>{{ h.get('gamesWon') }}</td>
             </tr>
             {% endfor %}
+
+
 
           </tbody>
         </table>

@@ -13,11 +13,11 @@ controlLink = 'csv/gameControl.csv'
 def showPlayerTable():
     df = ko.Table.show(playerTableLink)
     dfDict = df.to_dict('records')
-    dfTable = df[['name', 'winGames', 'finGames', 'masterUID']].rename(columns={'name':'Name', 'winGames':'Games won', 'finGames':'Games finished', 'masterUID':'Game ID (ranked only)'})
-    dfTable = dfTable.to_dict()
-    dfControl = ko.Table.readGameControl(controlLink)
-    dfControl = dfControl.to_dict('records')
-    return render_template('table.html', dfDict=dfDict, checkWinner=ko.Game.checkForWinner(dfDict), dfTable=dfTable, dfControl=dfControl)
+    if len(df) > 0:
+        dfControl = ko.Table.readGameControl(controlLink)
+        dfControl = dfControl.to_dict('records')
+    else: dfControl = ko.Table.createGameControl(controlLink)
+    return render_template('table.html', dfDict=dfDict, checkWinner=ko.Game.checkForWinner(dfDict, dfControl),  dfControl=dfControl)
 
 #PLAYER TABLE
 @tableBlueprint.route('/showPlayerTable/addPlayer', methods=['POST', 'GET'])
@@ -27,8 +27,7 @@ def addPlayer():
     dfN = ko.Table.addPlayer(df, name)
     dfDict = df.to_dict('records')
     dfDict.append(dfN)
-    dfDictN = ko.Game.resetGame(dfDict)
-    df = pd.DataFrame(dfDictN)
+    df = pd.DataFrame(dfDict)
     df.to_csv(playerTableLink, index=False)
     return redirect(url_for('table_blueprint.showPlayerTable'))
 
@@ -36,10 +35,6 @@ def addPlayer():
 def removePlayer(pIndex):
     df = ko.Table.show(playerTableLink)
     dfN = ko.Table.removePlayer(df, pIndex)
-    if len(dfN) > 0:
-        dfDict = dfN.to_dict('records')
-        dfDictN = ko.Game.resetGame(dfDict)
-        dfN = pd.DataFrame(dfDictN)
     dfN.to_csv(playerTableLink, index=False)
     return redirect(url_for('table_blueprint.showPlayerTable'))
 
@@ -56,8 +51,10 @@ def changeConfigMasterUID():
     newUID = uuid.uuid4().time
     dfControl = ko.Table.readGameControl(controlLink)
     dfControl['masterUID'] = newUID
-    print(dfControl)
     dfControl.to_csv(controlLink, index=False)
+    df = ko.Table.show(playerTableLink)
+    df['masterUID'] = newUID
+    df.to_csv(playerTableLink, index=False)
     return redirect(url_for('table_blueprint.showPlayerTable'))
 
 @tableBlueprint.route('/showPlayerTable/changeConfigTrunControl', methods=['POST', 'GET'])
@@ -73,6 +70,10 @@ def changeConfigTrunControl():
 #GAME FUNCTIONS
 @tableBlueprint.route('/showPlayerTable/gameFinish', methods=['POST', 'GET'])
 def gameFinish():
+    df = ko.Table.show(playerTableLink)
+    dfDict = df.to_dict('records')
+    # dfMaster = ko.Table.saveToMaster(dfDict)
+    # if isinstance(dfMaster, pd.DataFrame) == True: dfMaster.to_csv(masterLink, mode='a', index=False, header=False) 
     df = ko.Table.create()
     df.to_csv(playerTableLink, index=False)
     return redirect(url_for('showHome'))
