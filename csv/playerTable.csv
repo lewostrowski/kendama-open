@@ -1,3 +1,1 @@
-name,points,gamesWon,masterUID,winner
-a,0,2,0,True
-b,0,2,0,True
+name,points,masterUID,gamesWon

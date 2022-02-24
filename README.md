@@ -1,10 +1,11 @@
 # kendama-tournament
 Do zrobienia:
-* rozdzielenie table (jeszcze game i master)
+* rozdzielenie table (pozostał master)
+* możliwość usunięcia masterUID
+* uniemożliwienie zmiany gry i dodawania graczy w trakcie gry
 * kontrola kolejności (w połowie, ale pojawia się "end")
 * random trick mini-game
 * one-kendama mini game
 * unifikacja + optymalizacja
 * przechowywanie danych + autoryzacja dostępu
 * tournament mode
-* wyrzucić ustawienia gry do osobnej tabeli

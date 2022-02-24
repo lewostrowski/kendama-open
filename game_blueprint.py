@@ -24,8 +24,6 @@ def addPoint(pIndex):
     dfDict = df.to_dict('records')
     dfControl = ko.Table.readGameControl(controlLink)
     dfControl = dfControl.to_dict('records')
-    for p in dfDict:
-        if p.get('points') == len(dfControl[0].get('word')): p.update({'winner':True})
     df = pd.DataFrame(dfDict)
     df.to_csv(playerTableLink, index=False)
     return redirect(url_for('game_blueprint.showGame'))
@@ -39,29 +37,23 @@ def removePoint(pIndex):
 @gameBlueprint.route('/showGame/nextGame/<int:masterUID>', methods=['POST', 'GET'])
 def nextGame(masterUID):
     df = ko.Table.show(playerTableLink)
+    dfDict = df.to_dict('records')
     dfControl = ko.Table.readGameControl(controlLink)
     dfControl = dfControl.to_dict('records')
-    dfDict = df.to_dict('records')
-    dfDictN = ko.Game.resetGame(dfDict, dfControl)
-    df = pd.DataFrame(dfDictN)
-    df.to_csv(playerTableLink, index=False)
-    print(df)
+    if ko.Game.checkForWinner(dfDict, dfControl) == True:
+        dfDict = ko.Game.resetGame(dfDict, dfControl)
+        df = pd.DataFrame(dfDict)
+        df.to_csv(playerTableLink, index=False)
     return redirect(url_for('game_blueprint.showGame'))
 
 @gameBlueprint.route('/showGame/backToHome/<int:masterUID>', methods=['POST', 'GET'])
 def backToHome(masterUID):
     df = ko.Table.show(playerTableLink)
     dfDict = df.to_dict('records')
-
-    # dfMaster = ko.Table.saveToMaster(dfDict)
-    # if isinstance(dfMaster, pd.DataFrame) == True: dfMaster.to_csv(masterLink, mode='a', index=False, header=False) 
-
     dfControl = ko.Table.readGameControl(controlLink)
     dfControl = dfControl.to_dict('records')
-
-    isWinner = ko.Game.checkForWinner(dfDict, dfControl)
-    if isWinner == True: 
-        dfDictN = ko.Game.resetGame(dfDict, dfControl, nextGame=True)
-        df = pd.DataFrame(dfDictN)
+    if ko.Game.checkForWinner(dfDict, dfControl) == True:
+        dfDict = ko.Game.resetGame(dfDict, dfControl)
+        df = pd.DataFrame(dfDict)
         df.to_csv(playerTableLink, index=False)
     return redirect(url_for('table_blueprint.showPlayerTable'))

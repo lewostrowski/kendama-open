@@ -20,7 +20,7 @@ class Table:
             'word': ['ken'],
             'turnControl': [False],
             'gameUID': [0],
-            'winner':[None]
+            'winner':[False]
         }
         dfControl = pd.DataFrame.from_dict(defaultControl)
         dfControl.to_csv(controlLink, index=False)
@@ -93,7 +93,6 @@ class Game:
         return df
 
     def checkForWinner(playerDict, gameControl):
-        print(playerDict)
         playerLeft = []
         for p in playerDict:
             if p.get('points') == len(gameControl[0].get('word')):
@@ -108,7 +107,7 @@ class Game:
         hardReset = False
 
         for p in playerDict:
-            if (gameControl[0].get('masterUID') == 0) and nextGame == False:
+            if (gameControl[-1].get('masterUID') == 0) and nextGame == False:
                 hardReset = True
 
         if hardReset == False: 
@@ -118,7 +117,9 @@ class Game:
                    winnerPoints = p.get('points')
                    gamesWon = p.get('gamesWon') + 1
                    p.update({'gamesWon':gamesWon})
-                else: p.update({'points':0})
+                   p.update({'points':0})
+                else: 
+                    p.update({'points':0})
 
             gameUID = gameControl[-1].get('gameUID') + 1
 
@@ -133,12 +134,16 @@ class Game:
             }
 
             gameControl.append(saveGame)
+            if gameControl[0].get('winner') == False: gameControl.pop(0)
+
             df = pd.DataFrame(gameControl)
             df.to_csv(controlLink, index=False)
+
         elif hardReset == True:
             for p in playerDict:
                 p.update({'points':0})
                 p.update({'masterUID':0})
+                p.update({'winner':False})
 
             resetControl = Table.createGameContro(controlLink)
             resetControl.to_csv(controlLink, index=False)

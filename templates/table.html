@@ -22,6 +22,7 @@
     <!-- add player & player table / game cofig-->
     <div class="row pt-5">
       <div class="col-6">
+        {% if dfDict|length > 0 %}
         <ul class="list-group">
           {% for p in dfDict: %}
           <li class="list-group-item">
@@ -34,6 +35,11 @@
           </li>
           {% endfor %}
         </ul>
+        {% else %}
+        <div class="alert alert-primary text-center" role="alert">
+          Provide user data first!
+        </div>
+        {% endif %}
       </div>
 
       <div class="col-6">
@@ -42,7 +48,7 @@
         </div>
         <div id="addplayer" class="collapse hide pb-1">
           <form action="/showPlayerTable/addPlayer" method="post">
-              <input type="text" name="pName" placeholder="Player's name">
+              <input type="text" name="pName" placeholder="Player's name" required>
               <button class="btn btn-dark" type="submit">Add player</button>
           </form>
         </div>
@@ -52,14 +58,18 @@
 
         <div id="config" class="collapse hide pb-1">
             {% if dfDict|length > 0 %}
+              {% if dfControl[-1].get('winner') == False %}
               <form action="/showPlayerTable/changeConfigWord" method="post">
-                <input type="text" name="newWord" placeholder="{{ dfControl[0].get('word') }}">
+                <input type="text" name="newWord" placeholder="{{ dfControl[-1].get('word') }}" required>
                 <button class="btn btn-dark" type="submit">Set</button>
               </form>
+              {% else %}
+              <p>Chaning word during game is not allowed</p>
+              {% endif %}
 
               <form action="/showPlayerTable/changeConfigTrunControl" method="post">
                 
-                {% if dfControl[0].get('turnControl') == True %}
+                {% if dfControl[-1].get('turnControl') == True %}
                 <p>Turn control: ON</p>
                 <button class="btn btn-dark" type="submit" value="False" name="turnControl">Disable</button>
                 {% else %}
@@ -68,8 +78,8 @@
                 {% endif %}
               </form>
 
-              {% if dfDict|length > 0 and dfControl[0].get('masterUID') != 0 %}
-              Current masterUID: {{ dfControl[0].get('masterUID') }}
+              {% if dfDict|length > 0 and dfControl[-1].get('masterUID') != 0 %}
+              Current masterUID: {{ dfControl[-1].get('masterUID') }}
               {% else: %}
                 <form class="cofigMasterInput" action="/showPlayerTable/changeConfigMasterUID" method="post">
                   Current masterUID: None
@@ -83,7 +93,7 @@
 
           <form action="/showGame" method="post">
             <div class="d-grid pb-1">
-              {% if dfDict|length == 0 %}
+              {% if dfDict|length < 2 %}
               <button class="btn btn-dark btn-block" type="submit" disabled>Start game</button>
               {% else %}
               <button class="btn btn-dark btn-block" type="submit">Start game</button>
@@ -102,8 +112,6 @@
 
     <div class="row pt-5">
       <div class="col-12">
-        <p class='h3 text-lowercase'>game config</p>
-        <p>{{ dfControl }}</p>
         <table class="table table-bordered table-hover">
           <thead>
             <tr>

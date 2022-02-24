@@ -37,10 +37,10 @@
                 <div class="p-1">
                   {% if p.points == 0: %}
                     <p>{{ p.name}} {{ p.surname }}:</p>
-                  {% elif p.points == dfControl[0].get('word')|length %}
-                    <p>{{ p.name}} {{ p.surname }}: {{ dfControl[0].get('word') }}</p>
+                  {% elif p.points == dfControl[-1].get('word')|length %}
+                    <p>{{ p.name}} {{ p.surname }}: {{ dfControl[-1].get('word') }}</p>
                   {% else: %}
-                    <p>{{ p.name}} {{ p.surname }}: {{ dfControl[0].get('word')[:p.points] }}</p>
+                    <p>{{ p.name}} {{ p.surname }}: {{ dfControl[-1].get('word')[:p.points] }}</p>
                   {% endif %}
                 </div>
               </div>
@@ -54,7 +54,7 @@
 
       {% elif checkWinner == True: %}
         {% for p in dfDict: %}
-        {% if p.winner == True: %}
+        {% if p.get('points') < dfControl[-1].get('word')|length %}
           <p class='h3 text-center'>{{ p.name }} {{ p.surname }} won!</p>
        {% endif %}
        {% endfor %}

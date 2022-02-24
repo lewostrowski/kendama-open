@@ -24,11 +24,13 @@ def showPlayerTable():
 def addPlayer():
     name = request.form.get('pName')
     df = ko.Table.show(playerTableLink)
-    dfN = ko.Table.addPlayer(df, name)
-    dfDict = df.to_dict('records')
-    dfDict.append(dfN)
-    df = pd.DataFrame(dfDict)
-    df.to_csv(playerTableLink, index=False)
+    n = set(df['name'])
+    if name not in n:
+        dfN = ko.Table.addPlayer(df, name)
+        dfDict = df.to_dict('records')
+        dfDict.append(dfN)
+        df = pd.DataFrame(dfDict)
+        df.to_csv(playerTableLink, index=False)
     return redirect(url_for('table_blueprint.showPlayerTable'))
 
 @tableBlueprint.route('/showPlayerTable/removePlayer/<int:pIndex>', methods=['POST', 'GET'])
