@@ -20,7 +20,8 @@ class Table:
             'word': ['ken'],
             'turnControl': [False],
             'gameUID': [0],
-            'winner':[False]
+            'winner':[False],
+            'timeStamp': [None]
         }
         dfControl = pd.DataFrame.from_dict(defaultControl)
         dfControl.to_csv(controlLink, index=False)
@@ -42,18 +43,48 @@ class Table:
         tableName = tableName.drop(index=int(pIndex))
         return tableName
 
-    # def saveToMaster(playerDict):
-    #     saveResults = True
-    #     for p in playerDict:
-    #         if p.get('masterUID') == 0: saveResults = False
+    def saveToMaster(tableName, gameControl):
+        saveResults = True
+        workUID = 0
+        for i in tableName.index:
+            masterUID = gameControl.loc[gameControl.index == i].values[0][0]
+            workUID = masterUID
+            if masterUID == 0: saveResults = False
 
-    #     if saveResults == True:
-    #         timeStamp = datetime.now()
-    #         timeStamp = timeStamp.strftime('%Y-%m-%d %H:%M')
-    #         for p in playerDict: p.update({'timeStamp':timeStamp})
-    #         dfN = pd.DataFrame(playerDict)
-    #     else: dfN = False
-    #     return dfN
+        if saveResults == True:
+            masterGame = {
+                'masterUID': [],
+                'timeStamp': [],
+                'word': [],
+                'gameUID': [],
+                'name': [],
+                'points': [],
+                'winner': []
+            }
+
+            for gameUID in gameControl['gameUID']:
+                for p in tableName['name']:
+                    name = tableName.loc[tableName['name'] == p].values[0][0]
+                    gameUID = gameControl.loc[gameControl['gameUID'] == gameUID].values[0][3]
+                    word = gameControl.loc[gameControl['gameUID'] == gameUID].values[0][1]
+                    timeStamp = gameControl.loc[gameControl['gameUID'] == gameUID].values[0][6]
+                    winner = gameControl.loc[gameControl['gameUID'] == gameUID].values[0][4]
+                    winnerPoints = gameControl.loc[gameControl['gameUID'] == gameUID].values[0][5]
+
+                    masterGame['name'].append(name)
+                    masterGame['gameUID'].append(gameUID)
+                    masterGame['masterUID'].append(workUID)
+                    masterGame['word'].append(word)
+                    masterGame['timeStamp'].append(timeStamp)
+                    if name == winner: 
+                        masterGame['winner'].append(True)
+                        masterGame['points'].append(winnerPoints)
+                    else:
+                        masterGame['winner'].append(False)
+                        masterGame['points'].append(3)
+
+            masterGame = pd.DataFrame(masterGame)
+            masterGame.to_csv('csv/masterTable.csv', mode='a', index=False, header=False)
 
 
 class Group:
@@ -122,7 +153,9 @@ class Game:
                     p.update({'points':0})
 
             gameUID = gameControl[-1].get('gameUID') + 1
-
+            
+            timeStamp = datetime.now()
+            timeStamp = timeStamp.strftime('%Y-%m-%d %H:%M')
 
             saveGame = {
                 'masterUID':gameControl[-1].get('masterUID'),
@@ -130,7 +163,8 @@ class Game:
                 'turnControl':gameControl[-1].get('turnControl'),
                 'gameUID':gameUID,
                 'winner': winnerName,
-                'winnerPoints': int(winnerPoints)
+                'winnerPoints': int(winnerPoints),
+                'timeStamp': timeStamp
             }
 
             gameControl.append(saveGame)

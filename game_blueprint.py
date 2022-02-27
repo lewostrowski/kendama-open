@@ -22,8 +22,6 @@ def showGame():
 def addPoint(pIndex):
     df = ko.Game.addPoint(playerTableLink, pIndex)
     dfDict = df.to_dict('records')
-    dfControl = ko.Table.readGameControl(controlLink)
-    dfControl = dfControl.to_dict('records')
     df = pd.DataFrame(dfDict)
     df.to_csv(playerTableLink, index=False)
     return redirect(url_for('game_blueprint.showGame'))

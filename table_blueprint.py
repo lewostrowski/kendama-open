@@ -52,7 +52,11 @@ def changeConfigWord():
 def changeConfigMasterUID():
     newUID = uuid.uuid4().time
     dfControl = ko.Table.readGameControl(controlLink)
-    dfControl['masterUID'] = newUID
+    currentMasterUID = 0
+    for masterUID in dfControl['masterUID']:
+        currentMasterUID = dfControl.loc[dfControl['masterUID'] == masterUID].values[0][0]
+    if currentMasterUID == 0: dfControl['masterUID'] = newUID
+    else: dfControl['masterUID'] = 0
     dfControl.to_csv(controlLink, index=False)
     df = ko.Table.show(playerTableLink)
     df['masterUID'] = newUID
@@ -73,9 +77,8 @@ def changeConfigTrunControl():
 @tableBlueprint.route('/showPlayerTable/gameFinish', methods=['POST', 'GET'])
 def gameFinish():
     df = ko.Table.show(playerTableLink)
-    dfDict = df.to_dict('records')
-    # dfMaster = ko.Table.saveToMaster(dfDict)
-    # if isinstance(dfMaster, pd.DataFrame) == True: dfMaster.to_csv(masterLink, mode='a', index=False, header=False) 
+    dfControl = ko.Table.readGameControl(controlLink)
+    ko.Table.saveToMaster(df, dfControl) 
     df = ko.Table.create()
     df.to_csv(playerTableLink, index=False)
     return redirect(url_for('showHome'))

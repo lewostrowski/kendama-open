@@ -47,10 +47,14 @@
           <button class="btn btn-dark btn-block" data-bs-toggle="collapse" data-bs-target="#addplayer">add player</button>
         </div>
         <div id="addplayer" class="collapse hide pb-1">
+          {% if dfControl|length > 1 %}
           <form action="/showPlayerTable/addPlayer" method="post">
               <input type="text" name="pName" placeholder="Player's name" required>
               <button class="btn btn-dark" type="submit">Add player</button>
           </form>
+          {% else %}
+          <p>Adding players during game is not allowed</p>
+          {% endif %}
         </div>
         <div class="d-grid pb-1">
           <button class="btn btn-dark btn-block" data-bs-toggle="collapse" data-bs-target="#config">config</button>
