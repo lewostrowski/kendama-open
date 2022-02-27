@@ -1,27 +1,39 @@
 from flask import Blueprint
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, session, render_template, request, redirect, url_for
+
 import pandas as pd
 import uuid
+import shutil
+
 import kendama_open as ko
 
 tableBlueprint = Blueprint('table_blueprint', __name__)
-playerTableLink = 'csv/playerTable.csv'
-masterLink = 'csv/masterTable.csv'
-controlLink = 'csv/gameControl.csv'
+tableBlueprint.secret_key = 'gqw5fqw4fg5h577jt7ir68i'
 
 @tableBlueprint.route('/showPlayerTable')
 def showPlayerTable():
-    df = ko.Table.show(playerTableLink)
+    playerTableLink = session.get('playerTable', None)
+    controlLink = session.get('gameControl', None)
+    try:
+        df = ko.Table.show(playerTableLink)
+    except:
+        df = ko.Table.show(0)
+        df.to_csv(playerTableLink, index=False)
+
     dfDict = df.to_dict('records')
     if len(df) > 0:
         dfControl = ko.Table.readGameControl(controlLink)
         dfControl = dfControl.to_dict('records')
-    else: dfControl = ko.Table.createGameControl(controlLink)
+    else: 
+        dfControl = ko.Table.createGameControl(controlLink)
+        dfControl = dfControl.to_dict('records')
     return render_template('table.html', dfDict=dfDict, checkWinner=ko.Game.checkForWinner(dfDict, dfControl),  dfControl=dfControl)
 
 #PLAYER TABLE
 @tableBlueprint.route('/showPlayerTable/addPlayer', methods=['POST', 'GET'])
 def addPlayer():
+    playerTableLink = session.get('playerTable', None)
+    print(playerTableLink)
     name = request.form.get('pName')
     df = ko.Table.show(playerTableLink)
     n = set(df['name'])
@@ -35,6 +47,7 @@ def addPlayer():
 
 @tableBlueprint.route('/showPlayerTable/removePlayer/<int:pIndex>', methods=['POST', 'GET'])
 def removePlayer(pIndex):
+    playerTableLink = session.get('playerTable', None)
     df = ko.Table.show(playerTableLink)
     dfN = ko.Table.removePlayer(df, pIndex)
     dfN.to_csv(playerTableLink, index=False)
@@ -43,6 +56,7 @@ def removePlayer(pIndex):
 #CONFIG
 @tableBlueprint.route('/showPlayerTable/changeConfigWord', methods=['POST', 'GET'])
 def changeConfigWord():
+    controlLink = session.get('gameControl', None)
     dfControl = ko.Table.readGameControl(controlLink)
     dfControl['word'] = request.form.get('newWord')
     dfControl.to_csv(controlLink, index=False)
@@ -50,6 +64,8 @@ def changeConfigWord():
 
 @tableBlueprint.route('/showPlayerTable/changeConfigMasterUID', methods=['POST', 'GET'])
 def changeConfigMasterUID():
+    playerTableLink = session.get('playerTable', None)
+    controlLink = session.get('gameControl', None)
     newUID = uuid.uuid4().time
     dfControl = ko.Table.readGameControl(controlLink)
     currentMasterUID = 0
@@ -65,6 +81,7 @@ def changeConfigMasterUID():
 
 @tableBlueprint.route('/showPlayerTable/changeConfigTrunControl', methods=['POST', 'GET'])
 def changeConfigTrunControl():
+    controlLink = session.get('gameControl', None)
     status = request.form.get('turnControl')
     dfControl = ko.Table.readGameControl(controlLink)
     if status == 'True': dfControl['turnControl'] = True
@@ -76,9 +93,11 @@ def changeConfigTrunControl():
 #GAME FUNCTIONS
 @tableBlueprint.route('/showPlayerTable/gameFinish', methods=['POST', 'GET'])
 def gameFinish():
+    playerTableLink = session.get('playerTable', None)
+    controlLink = session.get('gameControl', None)
     df = ko.Table.show(playerTableLink)
     dfControl = ko.Table.readGameControl(controlLink)
     ko.Table.saveToMaster(df, dfControl) 
-    df = ko.Table.create()
-    df.to_csv(playerTableLink, index=False)
+    contestDirectory = session.get('contesDir', None)
+    shutil.rmtree(contestDirectory)
     return redirect(url_for('showHome'))

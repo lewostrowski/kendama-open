@@ -5,26 +5,23 @@ import uuid
 import kendama_open as ko
 
 statsBlueprint = Blueprint('stats_blueprint', __name__)
-playerTableLink = 'csv/playerTable.csv'
-masterLink = 'csv/playerModel.csv'
-
-## ŻEBY TO SIĘ SENSOWNIE FILTROWAŁO MUSI POWSTAWAĆ OSOBNE CSV Z WIDOKIEM
+masterLink = 'csv/masterTable.csv'
 
 @statsBlueprint.route('/showStats')
 def showStats():
     df = ko.Table.show(masterLink)
-    dfDict = df.to_dict()
-    dfDictR = df.to_dict('records')
+    dfDict = df.to_dict('records')
     uniqueNames = []
-    for p in dfDictR:
+    for p in dfDict:
         if p.get('name') not in uniqueNames:
             uniqueNames.append(p.get('name'))
-    return render_template('stats.html', dfDict=dfDict, dfDictR=dfDictR, uniqueNames=uniqueNames)
+    return render_template('stats.html', dfDict=dfDict, uniqueNames=uniqueNames)
 
 @statsBlueprint.route('/showStats/showGameDetails/<string:masterUID>', methods=['POST', 'GET'])
 def showGameDetails(masterUID):
     df = ko.Table.show(masterLink)
-    dfN = df.loc[df['masterUID'] == masterUID]
+    print(masterUID)
+    dfN = df.loc[df['masterUID'] == int(masterUID)]
     dfDict = dfN.to_dict('records')
     return render_template('detailedStats.html', dfDict=dfDict)
 

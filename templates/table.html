@@ -44,10 +44,28 @@
 
       <div class="col-6">
         <div class="d-grid pb-1">
+          {% if dfDict|length < 2 %}
+          <button class="btn btn-dark btn-block" disabled>Start game</button>
+          {% else %}
+          <button class="btn btn-dark btn-block" data-bs-toggle="collapse" data-bs-target="#startGame">Start game</button>
+          {% endif %}
+        </div>
+        <div id="startGame" class="collapse hide pb-1">
+        <form action="/showGame" method="post">
+          <p>Game information</p>
+          <div class="d-grid pb-1">
+            <button class="btn btn-outline-success btn-block" type="submit">Start game</button>
+          </div>
+        </form>
+      </div>
+
+
+
+        <div class="d-grid pb-1">
           <button class="btn btn-dark btn-block" data-bs-toggle="collapse" data-bs-target="#addplayer">add player</button>
         </div>
         <div id="addplayer" class="collapse hide pb-1">
-          {% if dfControl|length > 1 %}
+          {% if dfControl[-1].get('winner') == False %}
           <form action="/showPlayerTable/addPlayer" method="post">
               <input type="text" name="pName" placeholder="Player's name" required>
               <button class="btn btn-dark" type="submit">Add player</button>
@@ -83,7 +101,11 @@
               </form>
 
               {% if dfDict|length > 0 and dfControl[-1].get('masterUID') != 0 %}
-              Current masterUID: {{ dfControl[-1].get('masterUID') }}
+              <form class="cofigMasterInput" action="/showPlayerTable/changeConfigMasterUID" method="post">
+                Current masterUID: {{ dfControl[-1].get('masterUID') }}
+                  <button class="btn btn-dark" type="submit" value="Create masterUID">Delete</button>
+              </form>
+              
               {% else: %}
                 <form class="cofigMasterInput" action="/showPlayerTable/changeConfigMasterUID" method="post">
                   Current masterUID: None
@@ -95,22 +117,19 @@
               {% endif %}
         </div>
 
-          <form action="/showGame" method="post">
-            <div class="d-grid pb-1">
-              {% if dfDict|length < 2 %}
-              <button class="btn btn-dark btn-block" type="submit" disabled>Start game</button>
-              {% else %}
-              <button class="btn btn-dark btn-block" type="submit">Start game</button>
-              {% endif %}
-              </div>
-          </form>
+        <div class="d-grid pb-1">
+          <button class="btn btn-dark btn-block" data-bs-toggle="collapse" data-bs-target="#exitGame">Exit</button>
+        </div>
+        <div id="exitGame" class="collapse hide pb-1">
+          <p>Exit message</p>
           <form action="/showPlayerTable/gameFinish" method="post">
             <div class="d-grid">
-              <button class="btn btn-dark btn-block" type="submit">Exit</button>
+              <button class="btn btn-outline-danger btn-block" type="submit">Confirm exit</button>
             </div>
           </form>
-          </div>
+        </div>
 
+          </div>
       </div>
 
 
@@ -120,7 +139,6 @@
           <thead>
             <tr>
               <th>Name</th>
-              <th>Master UID</th>
               <th>Games played</th>
               <th>GamesWOn</th>
             </tr>
@@ -131,7 +149,6 @@
             
             <tr>
               <td>{{ h.get('name') }}</td>
-              <td>{{ h.get('masterUID') }}</td>
               <td>{{ dfControl[-1].get('gameUID') }}</td>
               <td>{{ h.get('gamesWon') }}</td>
             </tr>

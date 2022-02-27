@@ -56,26 +56,29 @@
         <table class="table table-bordered table-hover">
           <thead>
             <tr>
-              {% for h in dfDict %}
-              <th>{{ h }}</th>
-              {% endfor %}
+              <th>Game ID</th>
+              <th>timeStamp</th>
+              <th>Round</th>
+              <th>word</th>
+              <th>winner name</th>
+              <th>points</th>
             </tr>
           </thead>
           <tbody>
 
-            {% for h in dfDictR %}
+            {% for h in dfDict %}
             {% if h.winner == True %}
             <tr>
-              <td>{{ h.name }}</td>
-              <td>{{ h.winner }}</td>
-              <td>{{ h.points }}</td>
-              <td>{{ h.gameUID }}</td>
               <td>{{ h.masterUID }}
                 <form action="/showStats/showGameDetails/{{ h.masterUID }}" method="post">
                   <button class="btn btn-dark" type='submit'>Show game details</button>
               </form>
               </td>
-              <td>{{ h.finGames }}</td>
+              <td>{{ h.timeStamp }}</td>
+              <td>{{ h.gameUID }}</td>
+              <td>{{ h.word }}</td>
+              <td>{{ h.name }}</td>
+              <td>{{ h.points }}</td>
             </tr>
             {% endif %}
             {% endfor %}

@@ -4,7 +4,7 @@ from datetime import datetime
 
 class Table:
     def create():
-        df = pd.DataFrame(columns=[['name', 'points', 'masterUID', 'gamesWon']])
+        df = pd.DataFrame(columns=[['name', 'points', 'gamesWon']])
         return df
 
     def show(tableLink=0):
@@ -21,7 +21,8 @@ class Table:
             'turnControl': [False],
             'gameUID': [0],
             'winner':[False],
-            'timeStamp': [None]
+            'winnerPoints': [0],
+            'timeStamp': [0]
         }
         dfControl = pd.DataFrame.from_dict(defaultControl)
         dfControl.to_csv(controlLink, index=False)
@@ -36,7 +37,6 @@ class Table:
         userInput.update({'name':playerData})
         userInput.update({'points':0})
         userInput.update({'gamesWon':0})
-        userInput.update({'masterUID':0})
         return userInput
 
     def removePlayer(tableName, pIndex):
@@ -46,8 +46,8 @@ class Table:
     def saveToMaster(tableName, gameControl):
         saveResults = True
         workUID = 0
-        for i in tableName.index:
-            masterUID = gameControl.loc[gameControl.index == i].values[0][0]
+        for i in gameControl['masterUID']:
+            masterUID = gameControl.loc[gameControl['masterUID'] == i].values[0][0]
             workUID = masterUID
             if masterUID == 0: saveResults = False
 
@@ -85,7 +85,6 @@ class Table:
 
             masterGame = pd.DataFrame(masterGame)
             masterGame.to_csv('csv/masterTable.csv', mode='a', index=False, header=False)
-
 
 class Group:
     def geoProg(tableName):
@@ -134,7 +133,7 @@ class Game:
         else: finish = False
         return finish
 
-    def resetGame(playerDict, gameControl, controlLink='csv/gameControl.csv', nextGame=True):
+    def resetGame(playerDict, gameControl, controlLink, nextGame=True):
         hardReset = False
 
         for p in playerDict:
@@ -178,9 +177,6 @@ class Game:
                 p.update({'points':0})
                 p.update({'masterUID':0})
                 p.update({'winner':False})
-
-            resetControl = Table.createGameContro(controlLink)
-            resetControl.to_csv(controlLink, index=False)
         return playerDict
 
 class Stats:

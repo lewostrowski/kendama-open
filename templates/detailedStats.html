@@ -3,46 +3,45 @@
 
 <head>
     <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kendama Open</title>
 </head>
 
 <body>
-      <form class="gameFinish" action="/showStats/gameFinish" method="post">
-          <input type="submit" value="Finish">
-      </form>
-        <form class="mainTable" action="/showStats" method="post">
-            <input type="submit" value="mainTable">
+  <div class="container p-5">
+    {{ dfDict['gameUID'] }}
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <p class='h1 text-center text-lowercase'>Game ID {{ dfDict[0].get('masterUID' )}}</p>
+      </div>
+        <form class="gameFinish" action="/showStats/gameFinish" method="post">
+            <button class="btn btn-dark" type="submit">main menu</button>
         </form>
-    <!-- main table     -->
-    {% for p in dfDict %}
-    <div class="tableRow">
-      <div class="tableCell">
-        {{ p.masterUID }}
+        <form class="mainTable" action="/showStats" method="post">
+            <button class="btn btn-dark" type="submit">Go back</button>
+        </form>
       </div>
-      <div class="tableCell">
-        {{ p.gameUID }}
-      </div>
-      <div class="tableCell">
-        {{ p.timestamp }}
-      </div>
-      <div class="tableCell">
-        {{ p.name }}
-      </div>
-      <div class="tableCell">
-        {{ p.points }}
-      </div>
-      <div class="tableCell">
-        {{ p.word }}
-      </div>
-      <div class="tableCell">
-        {{ p.end }}
-      </div>
-      <div class="tableCell">
-        {{ p.finGames }}
-      </div>
-    </div>
-    {% endfor %}
+      {% for game in dfDict %}
+        <div class="row">
+          <div class="col-12">
+            <table class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th>timeStamp</th>
+                  <th>gameUID</th>
+                  <th>points</th>
+                  <th>winner</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+        </div>
+
+      {% endfor %}
+      
+  </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

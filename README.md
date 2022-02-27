@@ -1,9 +1,12 @@
 # kendama-tournament
 Do zrobienia:
-* możliwość usunięcia masterUID
-* kontrola kolejności (w połowie, ale pojawia się "end")
+* kontrola kolejności (w połowie)
 * random trick mini-game
 * one-kendama mini game
 * unifikacja + optymalizacja
 * przechowywanie danych + autoryzacja dostępu
 * tournament mode
+
+* ograniczyć wykorzystanie funkcj session
+* dodać zakładkę z zasadami gry w table
+* w szczegółowych statsach musi pokazywać jedną tabelę per gameUID
