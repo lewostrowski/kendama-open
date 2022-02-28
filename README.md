@@ -10,3 +10,5 @@ Do zrobienia:
 * ograniczyć wykorzystanie funkcj session
 * dodać zakładkę z zasadami gry w table
 * w szczegółowych statsach musi pokazywać jedną tabelę per gameUID
+* ograniczyć ilość otwieranych tabel we funkcjach 
+* autoryzacja tagami + zakładka jak otrzymać tag

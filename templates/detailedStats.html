@@ -23,18 +23,39 @@
             <button class="btn btn-dark" type="submit">Go back</button>
         </form>
       </div>
-      {% for game in dfDict %}
+      <div class="row justify-content-center">
+        <div class="col-6">
+          
+        </div>
+      </div>
+      {% for r in rounds %}
         <div class="row">
           <div class="col-12">
             <table class="table table-bordered table-hover">
               <thead>
                 <tr>
-                  <th>timeStamp</th>
+                  <th>timestamp</th>
                   <th>gameUID</th>
+                  <th>name</th>
                   <th>points</th>
                   <th>winner</th>
                 </tr>
               </thead>
+
+              <tbody>
+                {% for n in dfDict %}
+                {% if r == n.gameUID  %}
+                <tr>
+                  <td>{{ n.timeStamp }}</td>
+                  <td>{{ n.gameUID }}</td>
+                  <td>{{ n.name }}</td>
+                  <td>{{ n.points }}</td>
+                  <td>{{ n.winner }}</td>
+                </tr>
+
+                {% endif %}
+                {% endfor %}
+              </tbody>
             </table>
           </div>
         </div>

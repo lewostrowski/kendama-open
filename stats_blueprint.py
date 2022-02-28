@@ -20,10 +20,13 @@ def showStats():
 @statsBlueprint.route('/showStats/showGameDetails/<string:masterUID>', methods=['POST', 'GET'])
 def showGameDetails(masterUID):
     df = ko.Table.show(masterLink)
-    print(masterUID)
     dfN = df.loc[df['masterUID'] == int(masterUID)]
+    rounds = []
+    for r in dfN['gameUID']:
+        if r not in rounds: rounds.append(r)
     dfDict = dfN.to_dict('records')
-    return render_template('detailedStats.html', dfDict=dfDict)
+    
+    return render_template('detailedStats.html', dfDict=dfDict, rounds=rounds)
 
 @statsBlueprint.route('/showStats/overallWinner', methods=['POST', 'GET'])
 def overallWinner():
