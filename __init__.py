@@ -2,6 +2,7 @@ from flask import Flask, session, render_template, request, redirect, url_for
 from game_blueprint import gameBlueprint
 from table_blueprint import tableBlueprint
 from stats_blueprint import statsBlueprint
+from random_blueprint import randomBlueprint
 
 import pandas as pd
 import uuid
@@ -13,6 +14,7 @@ app = Flask(__name__)
 app.register_blueprint(gameBlueprint)
 app.register_blueprint(tableBlueprint)
 app.register_blueprint(statsBlueprint)
+app.register_blueprint(randomBlueprint)
 
 # sKey = str(uuid.uuid1())
 app.secret_key = 'gqw5fqw4fg5h577jt7ir68i'
@@ -32,6 +34,10 @@ def startKenGame():
     session['gameControl'] = os.path.join(dir, 'gameControl.csv')
     session['contesDir'] = dir
     return redirect(url_for('table_blueprint.showPlayerTable'))
+
+@app.route('/randomTrick', methods=['POST', 'GET'])
+def randomTrick():
+    return redirect(url_for('random_blueprint.showRandomMenu'))
 
 @app.route('/showStats', methods=['POST', 'GET'])
 def showStats():
