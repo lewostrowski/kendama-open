@@ -15,13 +15,35 @@
         <div class="row">
             <div class="col-12">
               <p class='h1 text-center text-lowercase'>random trick setup</p>
+              <p class="lead">
+                Loaded tricks: Kendama Word Cup 2014-2019 https://www.gloken.net/en/kwc2020-online/tricks/
+              </p>
+            </div>
+          </div>
+          
+          <div class="row justify-content-center">
+            <div class="col-6">
+              <form action="/showRandomMenu/pickTrick" method="post">
+                <div class="d-grid pb-1">
+                  <button class="btn btn-dark btn-block" type="submit">Pick trick</button>
+                </div>
+              </form>
             </div>
           </div>
 
+          <div class="row">
+            <div class="col-6">
+              {% if trick != None %}
+                {{ trick }}
+              {% else %}
+              <p>Click random button</p>
+              {% endif %}
+            </div>
+          </div>
 
         <div class="row justify-content-center">
             <div class="col-6">
-              <form class="gameFinish" action="/showStats/gameFinish" method="post">
+              <form action="/showRandomMenu/gameFinish" method="post">
                 <div class="d-grid pb-1">
                   <button class="btn btn-dark btn-block" type="submit">Exit</button>
                 </div>

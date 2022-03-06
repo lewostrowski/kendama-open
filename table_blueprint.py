@@ -27,13 +27,12 @@ def showPlayerTable():
     else: 
         dfControl = ko.Table.createGameControl(controlLink)
         dfControl = dfControl.to_dict('records')
-    return render_template('table.html', dfDict=dfDict, checkWinner=ko.Game.checkForWinner(dfDict, dfControl),  dfControl=dfControl)
+    return render_template('table.html', dfDict=dfDict, checkWinner=ko.Ken.checkForWinner(dfDict, dfControl),  dfControl=dfControl)
 
 #PLAYER TABLE
 @tableBlueprint.route('/showPlayerTable/addPlayer', methods=['POST', 'GET'])
 def addPlayer():
     playerTableLink = session.get('playerTable', None)
-    print(playerTableLink)
     name = request.form.get('pName')
     df = ko.Table.show(playerTableLink)
     n = set(df['name'])
@@ -93,11 +92,6 @@ def changeConfigTrunControl():
 #GAME FUNCTIONS
 @tableBlueprint.route('/showPlayerTable/gameFinish', methods=['POST', 'GET'])
 def gameFinish():
-    playerTableLink = session.get('playerTable', None)
-    controlLink = session.get('gameControl', None)
-    df = ko.Table.show(playerTableLink)
-    dfControl = ko.Table.readGameControl(controlLink)
-    ko.Table.saveToMaster(df, dfControl) 
     contestDirectory = session.get('contesDir', None)
     shutil.rmtree(contestDirectory)
     return redirect(url_for('showHome'))

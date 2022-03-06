@@ -110,8 +110,25 @@ class Group:
         if shuffle == True: playerArray = random.sample(playerArray, k=len(playerArray))
         return playerArray
 
+class RandomTricks:
+    def readTable(tableLink):
+        df = pd.read_csv(tableLink)
+        return df
 
-class Game:
+    def pickTrick(tableLink, level, year):
+        df = RandomTricks.readTable(tableLink)
+        dfN = df.loc[df['Level'] == level]
+        if type(year) == int: 
+            yearInput = f'year{year}'
+            dfN = dfN[['Level', 'Number', yearInput]]
+
+        if len(dfN.columns) == 3:
+            pick = random.randint(0,len(dfN))
+            dfN = dfN.loc[dfN.index == pick]
+            pickedTrick = dfN.to_dict('records')
+            return pickedTrick
+
+class Ken:
     def addPoint(tableLink, pIndex):
         df = Table.show(tableLink)
         df.loc[df.index == pIndex, 'points'] += 1

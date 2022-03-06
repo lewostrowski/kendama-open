@@ -1,7 +1,6 @@
 from flask import Flask, session, render_template, request, redirect, url_for
 from game_blueprint import gameBlueprint
 from table_blueprint import tableBlueprint
-from stats_blueprint import statsBlueprint
 from random_blueprint import randomBlueprint
 
 import pandas as pd
@@ -13,7 +12,6 @@ import kendama_open as ko
 app = Flask(__name__)
 app.register_blueprint(gameBlueprint)
 app.register_blueprint(tableBlueprint)
-app.register_blueprint(statsBlueprint)
 app.register_blueprint(randomBlueprint)
 
 # sKey = str(uuid.uuid1())
@@ -38,10 +36,6 @@ def startKenGame():
 @app.route('/randomTrick', methods=['POST', 'GET'])
 def randomTrick():
     return redirect(url_for('random_blueprint.showRandomMenu'))
-
-@app.route('/showStats', methods=['POST', 'GET'])
-def showStats():
-    return redirect(url_for('stats_blueprint.showStats'))
 
 if __name__ == "__main__":
     app.run(debug=True)

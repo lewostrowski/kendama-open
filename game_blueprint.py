@@ -17,12 +17,12 @@ def showGame():
     dfDict = df.to_dict('records')
     dfControl = ko.Table.readGameControl(controlLink)
     dfControl = dfControl.to_dict('records')
-    return render_template('game.html', dfDict=dfDict, dfControl=dfControl, checkWinner=ko.Game.checkForWinner(dfDict, dfControl))
+    return render_template('game.html', dfDict=dfDict, dfControl=dfControl, checkWinner=ko.Ken.checkForWinner(dfDict, dfControl))
 
 @gameBlueprint.route('/showGame/addPoint/<int:pIndex>', methods=['POST', 'GET'])
 def addPoint(pIndex):
     playerTableLink = session.get('playerTable', None)
-    df = ko.Game.addPoint(playerTableLink, pIndex)
+    df = ko.Ken.addPoint(playerTableLink, pIndex)
     dfDict = df.to_dict('records')
     df = pd.DataFrame(dfDict)
     df.to_csv(playerTableLink, index=False)
@@ -31,7 +31,7 @@ def addPoint(pIndex):
 @gameBlueprint.route('/showGame/removePoint/<int:pIndex>', methods=['POST', 'GET'])
 def removePoint(pIndex):
     playerTableLink = session.get('playerTable', None)
-    df = ko.Game.removePoint(playerTableLink, pIndex)
+    df = ko.Ken.removePoint(playerTableLink, pIndex)
     df.to_csv(playerTableLink, index=False)
     return redirect(url_for('game_blueprint.showGame'))
 
@@ -43,8 +43,8 @@ def nextGame(masterUID):
     dfDict = df.to_dict('records')
     dfControl = ko.Table.readGameControl(controlLink)
     dfControl = dfControl.to_dict('records')
-    if ko.Game.checkForWinner(dfDict, dfControl) == True:
-        dfDict = ko.Game.resetGame(dfDict, dfControl, controlLink)
+    if ko.Ken.checkForWinner(dfDict, dfControl) == True:
+        dfDict = ko.Ken.resetGame(dfDict, dfControl, controlLink)
         df = pd.DataFrame(dfDict)
         df.to_csv(playerTableLink, index=False)
     return redirect(url_for('game_blueprint.showGame'))
@@ -58,8 +58,8 @@ def backToHome(masterUID):
     dfDict = df.to_dict('records')
     dfControl = ko.Table.readGameControl(controlLink)
     dfControl = dfControl.to_dict('records')
-    if ko.Game.checkForWinner(dfDict, dfControl) == True:
-        dfDict = ko.Game.resetGame(dfDict, dfControl, controlLink)
+    if ko.Ken.checkForWinner(dfDict, dfControl) == True:
+        dfDict = ko.Ken.resetGame(dfDict, dfControl, controlLink)
         df = pd.DataFrame(dfDict)
         df.to_csv(playerTableLink, index=False)
     return redirect(url_for('table_blueprint.showPlayerTable'))
