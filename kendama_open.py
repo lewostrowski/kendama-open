@@ -125,6 +125,7 @@ class RandomTricks:
         if len(dfN.columns) == 3:
             pick = random.randint(0,len(dfN))
             dfN = dfN.loc[dfN.index == pick]
+            dfN = dfN.drop(columns='Number')
             pickedTrick = dfN.to_dict('records')
             return pickedTrick
 

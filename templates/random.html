@@ -34,7 +34,8 @@
           <div class="row">
             <div class="col-6">
               {% if trick != None %}
-                {{ trick }}
+                <p>Level: {{ trick[0].get('Level') }}</p>
+                <p>KWC year: {{ trick[0].keys()[2] }}</p>
               {% else %}
               <p>Click random button</p>
               {% endif %}
