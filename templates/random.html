@@ -24,6 +24,28 @@
           <div class="row justify-content-center">
             <div class="col-6">
               <form action="/showRandomMenu/pickTrick" method="post">
+                <label for="pickYear">KWC year:</label>
+                <select name="pickYear">
+                  <option value="2014">2014</option>
+                  <option value="2015">2015</option>
+                  <option value="2016">2016</option>
+                  <option value="2017">2017</option>
+                  <option value="2018">2018</option>
+                  <option value="2019">2019</option>
+                </select>
+                <label for="pickLevel">Level:</label>
+                <select name="pickLevel">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10">10</option>
+                </select>
                 <div class="d-grid pb-1">
                   <button class="btn btn-dark btn-block" type="submit">Pick trick</button>
                 </div>
@@ -33,9 +55,10 @@
 
           <div class="row">
             <div class="col-6">
-              {% if trick != None %}
-                <p>Level: {{ trick[0].get('Level') }}</p>
-                <p>KWC year: {{ trick[0].keys()[2] }}</p>
+              {% if trick|length > 0 %}
+                <p>Level: {{ trick[0].get('level') }}</p>
+                <p>KWC year: {{ trick[0].get('year') }}</p>
+                <p>Trick: {{ trick[0].get('name') }}</p>
               {% else %}
               <p>Click random button</p>
               {% endif %}

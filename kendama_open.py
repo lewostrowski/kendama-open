@@ -117,17 +117,11 @@ class RandomTricks:
 
     def pickTrick(tableLink, level, year):
         df = RandomTricks.readTable(tableLink)
-        dfN = df.loc[df['Level'] == level]
-        if type(year) == int: 
-            yearInput = f'year{year}'
-            dfN = dfN[['Level', 'Number', yearInput]]
-
-        if len(dfN.columns) == 3:
-            pick = random.randint(0,len(dfN))
-            dfN = dfN.loc[dfN.index == pick]
-            dfN = dfN.drop(columns='Number')
-            pickedTrick = dfN.to_dict('records')
-            return pickedTrick
+        dfN = df.loc[(df['level'] == level) & (df['year'] == year)].reset_index(drop=True)
+        pick = random.randint(0,len(dfN)-1)
+        dfN = dfN.loc[dfN.index == pick]
+        pickedTrick = dfN.to_dict('records')
+        return pickedTrick
 
 class Ken:
     def addPoint(tableLink, pIndex):
