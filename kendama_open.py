@@ -117,9 +117,17 @@ class RandomTricks:
 
     def pickTrick(tableLink, level, year):
         df = RandomTricks.readTable(tableLink)
-        dfN = df.loc[(df['level'] == level) & (df['year'] == year)].reset_index(drop=True)
-        pick = random.randint(0,len(dfN)-1)
-        dfN = dfN.loc[dfN.index == pick]
+        dfR = pd.DataFrame()
+        for y in year:
+            dfN = df.loc[df['year'] == int(y)]
+            dfR = pd.concat([dfR, dfN])
+        dfRR = pd.DataFrame()
+        for l in level:
+            dfN = dfR.loc[df['level'] == int(l)]
+            dfRR = pd.concat([dfRR, dfN])
+        dfRR = dfRR.reset_index(drop=True)
+        pick = random.randint(0,len(dfRR)-1)
+        dfN = dfRR.loc[dfRR.index == pick]
         pickedTrick = dfN.to_dict('records')
         return pickedTrick
 
