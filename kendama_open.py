@@ -128,6 +128,13 @@ class RandomTricks:
         dfRR = dfRR.reset_index(drop=True)
         pick = random.randint(0,len(dfRR)-1)
         dfN = dfRR.loc[dfRR.index == pick]
+        trickLink = dfN['name'].values
+        trickName = trickLink[0]
+        trickName = trickName.replace('   ', '')
+        trickName = trickName.replace('  ', '')
+        trickName = trickName.replace(',', '')
+        trickName = trickName.replace(' ', '+')
+        dfN['ytLink'] = trickName
         pickedTrick = dfN.to_dict('records')
         return pickedTrick
 

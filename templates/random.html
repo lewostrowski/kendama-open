@@ -22,6 +22,19 @@
           </div>
           <div class="row justify-content-center">
             <div class="col-6">
+              <form action="/showRandomMenu/deselect" method="post">
+                <button class="btn btn-dark" type="submit">Deselect all</button>
+              </form>
+
+              <form action="/showRandomMenu/tricksControl" method="post">
+                <p>Trick control: </p>
+                {% if session.get('tricksControl') == False %}
+                <button class="btn btn-dark" type="submit">Enalbe</button>
+                {% else %}
+                <button class="btn btn-dark" type="submit">Disable</button>
+                {% endif %}
+              </form>
+
               <form action="/showRandomMenu/pickTrick" method="post">
                 <label for="boxYear">KWC year:</label>
                 {% for y in years %}
@@ -55,22 +68,45 @@
                 {% endif %}
                 {% endfor %}
                 <div class="d-grid pb-1">
+                  {% if session.get('END') == True %}
+                  <button class="btn btn-dark btn-block" type="submit" disabled>Pick trick</button>
+                  {% else: %}
                   <button class="btn btn-dark btn-block" type="submit">Pick trick</button>
+                  {% endif %}
                 </div>
               </form>
             </div>
           </div>
 
           <div class="row">
+            
+            {% if session.get('END') == True %}
+            <div class="col-6">
+              <form action="/showRandomMenu/reset" method="post">
+                <div class="d-grid pb-1">
+                <button class="btn btn-dark btn-block" type="submit">Reset</button>
+              </div>
+              </form>
+              </div>
+            {% else: %}
             <div class="col-6">
               {% if trick|length > 0 %}
                 <p>Level: {{ trick[0].get('level') }}</p>
                 <p>KWC year: {{ trick[0].get('year') }}</p>
                 <p>Trick: {{ trick[0].get('name') }}</p>
+                <p>Wath on <a href="https://www.youtube.com/results?search_query=kendama+{{ trick[0].get('ytLink') }}" target="_blank">Youtbue</a></p>
               {% else %}
               <p>Click random button</p>
               {% endif %}
+
+              <p>Past tricks: </p>
+              {% if session.get('tricksControl') == True%}
+              {% for t in session.get('tricksHistory') %}
+                <p>{{ t }}</p>
+              {% endfor %}
+              {% endif %}
             </div>
+            {% endif %}
           </div>
 
         <div class="row justify-content-center">

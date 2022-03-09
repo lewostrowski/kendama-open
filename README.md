@@ -12,3 +12,6 @@ Do zrobienia:
 * w szczegółowych statsach musi pokazywać jedną tabelę per gameUID
 * ograniczyć ilość otwieranych tabel we funkcjach 
 * autoryzacja tagami + zakładka jak otrzymać tag
+
+
+* w tabeli z trikami dalej są japońskie znaki
