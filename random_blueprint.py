@@ -62,9 +62,13 @@ def pickTrick():
         session['previousLevels'] = inputLevels
     return redirect(url_for('random_blueprint.showRandomMenu'))
 
-@randomBlueprint.route('/showRandomMenu/deselect', methods=['POST', 'GET'])
-def deselectTricks():
+@randomBlueprint.route('/showRandomMenu/deselectYears', methods=['POST', 'GET'])
+def deselectYears():
     session.pop('previousYears')
+    return redirect(url_for('random_blueprint.showRandomMenu'))
+
+@randomBlueprint.route('/showRandomMenu/deselectLevels', methods=['POST', 'GET'])
+def deselectLevels():
     session.pop('previousLevels')
     return redirect(url_for('random_blueprint.showRandomMenu'))
 

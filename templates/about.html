@@ -18,37 +18,43 @@
     <div class="container vh-100">
 
       <!-- HEADER -->
-        <div class="row h-25">
+        <div class="row">
           <div class="col-12 pt-5">
             <p class='h1 display-1 text-center text-lowercase'>kendama-open</p>
           </div>
           </div>
   
-        <!-- MENU BUTTONS -->
-        <div class="row p-3 justify-content-center h-75">
-          <div class="col-lg-6 col-md-12 fixed-center">
-            <form action="/startKenGame" method="post">
-              <div class="d-grid p-2">
-                <button class='btn btn-dark btn-lg btn-block' type="submit"><span class="h2 text-center">Game of K.E.N</span></button>
-              </div>
-            </form>
-  
-            <form action="/randomTrick" method="post">
-              <div class="d-grid p-2">
-                <button class='btn btn-dark btn-lg btn-block' type="submit"><span class="h2 text-center">Random trick</span></button>
-              </div>
-            </form>
-
-            <form action="/about" method="post">
-              <div class="d-grid p-2">
-                <button class='btn btn-dark btn-lg btn-block' type="submit"><span class="h2 text-center">About</span></button>
-              </div>
-            </form>
+        <!-- LOGO -->
+      <div class="row p-3">
+        <div class="col-12">
+          <p class="lead text-center">==)(O</p>
         </div>
       </div>
 
-        
+      <div class="row justify-content-center">
+    <!-- about kendama-open -->
+    <div class="col-sm-12 col-md-5">
+      <div class="d-grid pb-2">
+        <button class="btn btn-dark btn-block" data-bs-toggle="collapse" data-bs-target="#aboutKendama">
+          <span class="h2 text-center">About kendama-open</span>
+        </button>
       </div>
+      <div id="aboutKendama" class="collapse hide pb-1">
+
+        <p>kendama-open</p>
+      </div>
+          <!-- EXIT -->
+        <form action="/showAbout/goback" method="post">
+            <div class="d-grid pb-2">
+            <button class="btn btn-dark btn-block" type="submit">
+                <span class="h4">Exit</span>
+            </button>
+            </div>
+        </form>
+
+      </div>
+
+    </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

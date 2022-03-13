@@ -3,38 +3,51 @@
 
 <head>
     <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hubballi&display=swap" rel="stylesheet"> 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/game.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kendama Open</title>
 </head>
 
-<body>
-    <div class="container p-5">
+<body style="font-family:Hubballi;">
+    <div class="container vh-100">
+      <!-- HEADER -->
       <div class="row">
-        <div class="col-12">
-          <p class='h1 text-center text-lowercase'>Game of K.E.N</p>
+        <div class="col-sm-12 pt-5 align-self-center">
+          <p class='h1 text-center text-uppercase'>Game of K.E.N</p>
         </div>
       </div>
 
+
+      <!-- LOGO -->
+      <div class="row p-3">
+        <div class="col-12">
+          <p class="lead text-center">==)(O</p>
+        </div>
+      </div>
+
+        <!-- GAME -->
        {% if checkWinner == False: %}
         {% for p in dfDict %}
         <div class="row">
-          {% if p.points < dfControl[0].get('word')|length %}
-          
-            
-              <div class="d-inline-flex p-2 align-items-baseline justify-content-center">
-                <div class="p-1">
+            <div class="d-inline-flex display-6 align-items-baseline justify-content-center">
+        {% if p.points < dfControl[0].get('word')|length %}
                   <form action="/showGame/addPoint/{{ dfDict.index(p) }}" method="post">
-                      <button type="submit" class='btn btn-dark btn-lg'>+1</button>
+                      <button type="submit" class='btn btn-lg p-2'>
+                        <i class="bi display-6 bi-plus-circle"></i>
+                      </button>
                   </form>
-                </div>
-                <div class="p-1">
                     <form action="/showGame/removePoint/{{ dfDict.index(p) }}" method="post">
-                        <button type="submit" class='btn btn-dark btn-lg'>-1</button>
+                        <button type="submit" class='btn btn-lg p-2'>
+                          <i class="bi display-6 bi-dash-circle"></i>
+                        </button>
                     </form>
-                </div>
-                <div class="p-1">
+
                   {% if p.points == 0: %}
                     <p>{{ p.name}} {{ p.surname }}:</p>
                   {% elif p.points == dfControl[-1].get('word')|length %}
@@ -42,44 +55,51 @@
                   {% else: %}
                     <p>{{ p.name}} {{ p.surname }}: {{ dfControl[-1].get('word')[:p.points] }}</p>
                   {% endif %}
-                </div>
-              </div>
-            
-
 
           {% endif %}
         </div>
+      </div>
         {% endfor %}
+
 
 
       {% elif checkWinner == True: %}
         {% for p in dfDict: %}
         {% if p.get('points') < dfControl[-1].get('word')|length %}
+        <div class="row">
           <p class='h3 text-center'>{{ p.name }} {{ p.surname }} won!</p>
+        </div>
        {% endif %}
        {% endfor %}
-         
+       {% endif %}  
 
         <div class="row justify-content-center">
-           <div class="col-6">
-            <form action="/showGame/nextGame/{{ dfControl[0].get('masterUID') }}" method="post">
-              <div class="d-grid p-2">
-                 <button type="submit" class='btn btn-dark btn-block'>Next game</button>
-              </div>
-            </form>
-           
-           {% endif %}
 
-               <form action="/showGame/backToHome/{{ dfControl[0].get('masterUID') }}" method="post">
+          </div>
+
+
+           <!-- EXIT -->
+           <div class="row justify-content-center fixed-bottom">
+            <div class="col-sm-12 col-md-5">
+            {% if checkWinner == True: %}
+            
+              <form action="/showGame/nextGame/{{ dfControl[0].get('masterUID') }}" method="post">
                 <div class="d-grid p-2">
-                   <button type="submit" class='btn btn-dark btn-block'>Back to home</button>
+                   <button type="submit" class='btn btn-dark btn-block'>
+                    <span class="h2 text-center">Next game</span>
+                   </button>
                 </div>
               </form>
-         </div>
+            {% endif %}
+               <form action="/showGame/backToHome/{{ dfControl[0].get('masterUID') }}" method="post">
+                <div class="d-grid p-2">
+                   <button type="submit" class='btn btn-dark btn-block'>
+                    <span class="h2 text-center">Back to home</span>
+                   </button>
+                </div>
+              </form>
         </div>
 
-      </div>
-    </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
