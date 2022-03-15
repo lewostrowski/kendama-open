@@ -37,8 +37,11 @@
             {% if session.get('END') == True %}
             <div class="col-sm-12">
               <form action="/showRandomMenu/reset" method="post">
-                <div class="d-grid pb-1">
-                <button class="btn btn-dark btn-block" type="submit">Reset</button>
+                <div class="d-grid pb-2">
+                  <p>You have reached the end of tricks</p>
+                <button class="btn btn-dark btn-block" type="submit">
+                  <span class="h2 text-center">Reset tricks</span>
+                </button>
               </div>
               </form>
               </div>
@@ -82,7 +85,7 @@
         </div>
           
           <!-- MENU -->
-          <div class="row fixed-bottom justify-content-center">
+          <div class="row justify-content-center">
 
         <!-- pick -->
             <div class="col-sm-12 col-md-5">
