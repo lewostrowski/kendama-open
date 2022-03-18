@@ -84,11 +84,6 @@
             </div>
           </form>
         </div>
-
-          {% else %}
-          <div class="alert alert-primary text-center">
-            <span class="h5"><i class="bi bi-x-circle"></i> Adding players during game not allowed!</span>
-          </div>
           {% endif %}
         </div>
 
@@ -96,35 +91,41 @@
     <div class="row justify-content-center">
 
       <div class="col-sm-12 col-md-6">
-        <div class="d-grid pb-2">
+        
           {% if dfDict|length < 2 %}
+          <div class="d-grid pb-2">
           <button class="btn btn-dark btn-block" disabled>
             <span class="h2 text-center">Start game</span>
           </button>
-          {% else %}
-          <button class="btn btn-dark btn-block" data-bs-toggle="collapse" data-bs-target="#startGame">
-            <span class="h2 text-center">Start game</span>
-          </button>
-          {% endif %}
         </div>
-
-        <!-- start game -->
-        <div id="startGame" class="collapse hide pb-1">
-        <form action="/showGame" method="post">
-          {% if dfControl[-1].get('winner') == False %}
-          <p>Game information</p>
-          <div class="d-grid pb-2">
-            <button class="btn btn-outline-success btn-block" type="submit">
-              <span class="h2 text-center">Start game</span>
-            </button>
-          </div>
-
-          {% else %}
+          {% elif dfControl[-1].get('winner') != False %}
+          <form action="/showGame" method="post">
           <div class="d-grid pb-2">
             <button class="btn btn-outline-success btn-block" type="submit">
               <span class="h2 text-center">Resume Game</span>
             </button>
           </div>
+        </form>
+          {% else %}
+          <div class="d-grid pb-2">
+          <button class="btn btn-dark btn-block" data-bs-toggle="collapse" data-bs-target="#startGame">
+            <span class="h2 text-center">Start game</span>
+          </button>
+        </div>
+          {% endif %}
+
+        <!-- start game -->
+        <div id="startGame" class="collapse hide pb-1">
+        <form action="/showGame" method="post">
+          {% if dfControl[-1].get('winner') == False %}
+          <p>After the first finished game, you won't be able to add another player or change the game setting. However, a player removal option will always be active.</p>
+          <p>You can always go back to the contest setup menu and resume the game, even unfinished.</p>
+          <div class="d-grid pb-2">
+            <button class="btn btn-outline-success btn-block" type="submit">
+              <span class="h2 text-center">Start game</span>
+            </button>
+          </div>
+ 
           {% endif %}
         </form>
       </div>
@@ -142,7 +143,7 @@
         <div id="config" class="collapse hide pb-1">
           {% if dfControl[-1].get('winner') == False %}
               <form action="/showPlayerTable/changeConfigWord" method="post">
-                <input class="form-control text-center" type="text" name="newWord" placeholder="{{ dfControl[-1].get('word') }}" required>
+                <input class="form-control text-center" type="text" name="newWord" placeholder="Current word: {{ dfControl[-1].get('word') }}" required>
                 <div class="d-grid pb-2 pt-2">
                 <button class="btn btn-outline-success btn-block" type="submit">
                   <span class="h4 text-center"><i class="bi bi-check-circle"></i> Set</span>
@@ -174,7 +175,7 @@
 
               <div id="exitGame" class="collapse hide pb-2">
                 <div class="alert alert-primary text-center">
-                  <span class="h5"><i class="bi bi-exclamation-circle"></i> Finish game message</span>
+                  <span class="h5"><i class="bi bi-exclamation-circle"></i>Kendama-open does not save games. You will lose all your progress after exiting.</span>
                 </div>
 
                 <form action="/showPlayerTable/gameFinish" method="post">

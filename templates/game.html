@@ -39,7 +39,7 @@
         {% if p.points < dfControl[0].get('word')|length %}
                   <form action="/showGame/addPoint/{{ dfDict.index(p) }}" method="post">
                       <button type="submit" class='btn btn-lg p-2'>
-                        <i class="bi display-6 bi-plus-circle"></i>
+                        <i class="bi display-3 bi-plus-circle"></i>
                       </button>
                   </form>
                     <form action="/showGame/removePoint/{{ dfDict.index(p) }}" method="post">
