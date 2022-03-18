@@ -1,0 +1,5 @@
+masterUID,word,turnControl,gameUID,winner,winnerPoints,timeStamp
+0,ken,False,1,Mikołaj,1,2022-03-18 17:42
+0,ken,False,2,Mikołaj,2,2022-03-18 17:43
+0,ken,False,3,Matwiej,0,2022-03-18 17:43
+0,ken,False,4,Mikołaj,-1,2022-03-18 17:43

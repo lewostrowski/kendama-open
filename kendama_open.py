@@ -146,7 +146,9 @@ class Ken:
 
     def removePoint(tableLink, pIndex):
         df = Table.show(tableLink)
-        df.loc[df.index == pIndex, 'points'] -= 1
+        zeroCheck = df.loc[df.index == pIndex]
+        zeroCheck = zeroCheck['points'].values
+        if zeroCheck > 0: df.loc[df.index == pIndex, 'points'] -= 1
         return df
 
     def checkForWinner(playerDict, gameControl):
