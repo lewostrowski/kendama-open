@@ -69,6 +69,29 @@
         </div>
       </div>
 
+      <div class="row justify-content-center pb-2">
+        <!-- add player -->
+
+        
+          {% if dfControl[-1].get('winner') == False %}
+          <div class="col-sm-12 col-md-6">
+          <form action="/showPlayerTable/addPlayer" method="post">
+            <div class="d-flex">
+              <input class="form-control text-center" type="text" name="pName" placeholder="Player's name" required>
+              <button class="btn btn-outline-success" type="submit">
+                <span class="h4 text-center"><i class="bi bi-person-plus"></i></span>
+              </button>
+            </div>
+          </form>
+        </div>
+
+          {% else %}
+          <div class="alert alert-primary text-center">
+            <span class="h5"><i class="bi bi-x-circle"></i> Adding players during game not allowed!</span>
+          </div>
+          {% endif %}
+        </div>
+
     <!-- CONTEST MENU -->
     <div class="row justify-content-center">
 
@@ -106,30 +129,7 @@
         </form>
       </div>
 
-      <!-- add player -->
-        <div class="d-grid pb-2">
-          <button class="btn btn-dark btn-block" data-bs-toggle="collapse" data-bs-target="#addplayer">
-            <span class="h2 text-center">Add player</span>
-          </button>
-        </div>
 
-        <div id="addplayer" class="collapse hide pb-1">
-          {% if dfControl[-1].get('winner') == False %}
-          
-          <form action="/showPlayerTable/addPlayer" method="post">
-              <input class="form-control text-center" type="text" name="pName" placeholder="Player's name" required>
-              <div class="d-grid pb-2 pt-2">
-              <button class="btn btn-outline-success btn-block" type="submit">
-                <span class="h4 text-center"><i class="bi bi-person-plus"></i> Add player</span>
-              </button>
-            </div>
-          </form>
-          {% else %}
-          <div class="alert alert-primary text-center">
-            <span class="h5"><i class="bi bi-x-circle"></i> Adding players during game not allowed!</span>
-          </div>
-          {% endif %}
-        </div>
 
         <!-- word settings -->
         {% if dfDict|length > 0 %}
