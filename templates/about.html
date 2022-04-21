@@ -32,22 +32,53 @@
       </div>
 
       <div class="row justify-content-center">
-    <!-- about kendama-open -->
+
     <div class="col-sm-12 col-md-5">
+
+      <!-- about kendama-open -->
       <div class="d-grid pb-2">
         <button class="btn btn-dark btn-block" data-bs-toggle="collapse" data-bs-target="#aboutKendama">
           <span class="h2 text-center">About kendama-open</span>
         </button>
       </div>
+
       <div id="aboutKendama" class="collapse hide pb-1">
 
-        <p>kendama-open</p>
+       <p>Kendama-open is a lightweight, mobile-first web application to diversify experience with kendama. It uses Flask repositories and a little of Boostrap 5 to create a fast and reliable game environment. </p> 
+
+        <p>Due to safety reasons (yours, primarily), this site will not store any personal data or your activity on the site. Why would we want to anyway? ¯\_(ツ)_/¯</p>
+        
+        <p>The only information the site will store on your web browser (cookies files) is session essentials (only game-related information), which will be deleted right after the session.</p>
       </div>
+
+      <!-- how to play -->
+      <div class="d-grid pb-2">
+        <button class="btn btn-dark btn-block" data-bs-toggle="collapse" data-bs-target="#howtoplay">
+          <span class="h2 text-center">How to play</span>
+        </button>
+      </div>
+      <div id="howtoplay" class="collapse hide pb-1">
+
+       <p><b>At first, you need a kendama (a physical one).</b> If you are still reading this, we assume you are unfamiliar with kendama or just started your journey with skill toys. Although there are a lot of kendamas manufacturers, we strongly recommend starting with the most popular companys' products (like Sweets Kendama, Kendama USA, Krom) so you don't need to care about the toy's quality.</p>
+
+       <p>If you already have one, you can choose two types of games:</p>
+
+       <p><b>Game of K.E.N</b> is a game manager to control the play flow. It comes with:</p>
+        <ul>
+          <li>Contest menu, where you can add players, configure the game settings and see the contest results.</li>
+          <li>The game screen, where you can save and track round progress.</li>
+        </ul>
+        <p>Remember that your progress will be irrevocably deleted after exiting Contest Menu.</p>
+
+        <p><b>Random trick</b> is a trick picker with Kendama Word Cup sets from 2014 to 2019. You can filter by trick level (1-10), year or both! App also provides a simple trick-tracker so they won't duplicate during play.</p>
+      </div>
+
+
           <!-- EXIT -->
         <form action="/showAbout/goback" method="post">
             <div class="d-grid pb-2">
             <button class="btn btn-dark btn-block" type="submit">
-                <span class="h4">Exit</span>
+                <span class="h2 text-center">Exit</span>
             </button>
             </div>
         </form>
